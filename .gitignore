@@ -1,0 +1,46 @@
+# ============================================================
+# SECRETS AND CREDENTIALS — NEVER commit these to git
+# These files contain API keys, passwords, and tokens.
+# Exposing them is a security incident.
+# ============================================================
+.env
+.env.*
+*.key
+*.pem
+credentials.json
+secrets.json
+service-account*.json
+
+# ============================================================
+# PERSONAL CLAUDE SETTINGS
+# Each developer has their own settings — not shared with team.
+# Skills and agents ARE shared (see bottom of this file).
+# ============================================================
+.claude/settings.json
+
+# ============================================================
+# OS GENERATED FILES — no value in version control
+# ============================================================
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ============================================================
+# EDITOR FILES — personal preferences, not project config
+# ============================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ============================================================
+# DEPENDENCIES — installed via npm install, not committed
+# ============================================================
+node_modules/
+
+# ============================================================
+# EXPLICITLY SHARED (not gitignored):
+# .claude/skills/   — team skills, committed to git
+# .claude/agents/   — team subagents, committed to git
+# CLAUDE.md         — always-on project context, committed to git
+# ============================================================
