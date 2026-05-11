@@ -1,0 +1,96 @@
+======================================================================
+  TEMPERATURE TEST RESULTS
+  Date: 2026-05-11 23:02:38
+  Model: glm-4.5-air
+  Prompt: "Give me a one-sentence movie idea."
+  Runs per temperature: 3
+======================================================================
+
+  HOW TEMPERATURE WORKS:
+----------------------------------------------------------------------
+  Temperature controls how the model picks the next token (word).
+
+  At each step, the model calculates probabilities for possible
+  next tokens. Temperature adjusts those probabilities:
+
+    temp=0.0 → Always picks the highest-probability token (deterministic)
+    temp=0.5 → Some variation, mostly follows top probabilities
+    temp=1.0 → Spreads probability evenly, more random/creative picks
+
+  You'll see below: at temp=0.0 all responses are similar.
+  At temp=1.0 responses are wildly different from each other.
+
+======================================================================
+  TEMPERATURE: 0.0  (LOW — predictable, factual, deterministic)
+======================================================================
+
+  Run 1: Here's a one-sentence movie idea:  
+> **A memory archivist, hired to delete traumatic experiences for the wealthy, discovers a hidden pattern within the erased minds that forces them to question the very nature of consciousness and control.**
+
+  Run 2: Here's a one-sentence movie idea: **A disgraced art thief must pull off one last impossible heist to steal back his daughter's stolen heart, the only thing capable of curing her rare genetic condition.**
+
+  Run 3: "A man trapped reliving the same day in a time loop must solve the murder of the woman he loves before it resets, only to discover he is the killer."
+
+======================================================================
+  TEMPERATURE: 0.3  (LOW — predictable, factual, deterministic)
+======================================================================
+
+  Run 1: "Stranded in the desert with dwindling water, a man discovers that the last bottle reveals the hidden thoughts of anyone who touches it."
+
+  Run 2: Here's a one-sentence movie idea:  
+*A time-traveling librarian must prevent a future catastrophe by stealing forbidden books from her own library's archives, unaware that the true danger comes from the knowledge she's already collecting.*
+
+  Run 3: Here are a few one-sentence movie ideas across different genres:
+
+1.  **Sci-Fi:** A rogue time-loop tech support agent must reset the same disastrous day thousands of times to stop a temporal catastrophe, but each reset subtly alters the man she's trying to save.
+2.  **Comedy:** A cynical city slicker inherits his estranged uncle's sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient sentient
+
+======================================================================
+  TEMPERATURE: 0.5  (MEDIUM — balanced, some variety)
+======================================================================
+
+  Run 1: Here's a one-sentence movie idea:  
+**A brilliant astrophysicist discovers that an approaching cosmic darkness isn't just a physical phenomenon, but the shadow cast by a forgotten deity humanity once betrayed, forcing her to reconcile science with ancient faith to avoid annihilation.**
+
+  Run 2: Here's a one-sentence movie idea:  
+**A memory thief discovers their own stolen identity while stealing corporate secrets from a clandestine organization that erases people to rewrite history.**
+
+  Run 3: Here's a one-sentence movie idea: **A man's involuntary age reversal accelerates as humanity's extinction looms, forcing him to confront the terrifying paradox of youth while the world crumbles around him.**
+
+======================================================================
+  TEMPERATURE: 0.7  (MEDIUM — balanced, some variety)
+======================================================================
+
+  Run 1: A corporate executive discovers his hyper-competitant personal assistant is actually a ghost who is literally fading away and can only maintain his form by completing unfinished business, forcing the executive to confront her hidden past while ensuring his company's critical deadline isn't met.
+
+  Run 2: "A grieving man uses experimental technology that erases his own memories to find his missing wife, only to discover he was the one who erased her in the first place."
+
+  Run 3: Here's a one-sentence movie idea:  
+**"A time-traveling detective must investigate his own unsolved murder, realizing his past and future selves are the prime suspects."**
+
+======================================================================
+  TEMPERATURE: 1.0  (HIGH — creative, varied, unpredictable)
+======================================================================
+
+  Run 1: Here's a one-sentence movie idea: **A time traveler accidentally becomes the villain in a paradox where his future self is the hero he always tried to be, forcing him to confront the catastrophic consequences of saving his own life.** *(Themes: redemption, fate vs. choice, unintended consequences, moral complexity)*
+
+  Run 2: A quantum fugitive must escape hunters across timelines while hunting down the sins that made them a target in the first place.
+
+  Run 3: **A memory thief must steal the past from a surveillance society to survive, becoming an unwitting architect of the future.**
+
+======================================================================
+  ANALYSIS: What to look for
+======================================================================
+
+  1. CONSISTENCY across runs:
+     - At temp=0.0: all runs should be nearly identical
+     - At temp=1.0: each run should be different
+
+  2. CREATIVITY level:
+     - At temp=0.0: safe, predictable movie ideas
+     - At temp=1.0: wild, unexpected, creative ideas
+
+  3. When to use what:
+     - temp=0.0-0.3: coding, facts, data extraction, moderation
+     - temp=0.4-0.7: summarization, education, problem-solving
+     - temp=0.8-1.0: brainstorming, creative writing, marketing

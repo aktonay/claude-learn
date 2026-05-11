@@ -1,0 +1,130 @@
+======================================================================
+  STRUCTURED OUTPUT TECHNIQUES COMPARISON
+  Date: 2026-05-11 23:22:01
+  Model: glm-4.5-air
+======================================================================
+
+  HOW IT WORKS:
+----------------------------------------------------------------------
+
+  TECHNIQUE 1: Explicit Format Instructions in User Message
+  ─────────────────────────────────────────
+  Put strict format rules directly in the user message:
+  'Output ONLY raw JSON. No markdown. No backticks. Start with { end with }.'
+  This constrains the model's output format before it even starts.
+
+    messages = [
+      {"role": "user", "content": "Output ONLY raw JSON..."}
+    ]
+
+  NOTE: On some models, system-role messages cause reasoning tokens
+  to consume the output. Putting instructions in the user message
+  works more reliably across different API providers.
+
+  TECHNIQUE 2: Stop Sequences
+  ─────────────────────────────────────────
+  You specify a string that triggers IMMEDIATE stop of generation.
+  When the model generates that string, output is cut off right there.
+  Safety net in case the model tries to add commentary.
+
+    response = client.chat.completions.create(
+        ..., stop=["```"]  ← STOP SEQUENCE
+    )
+
+  ANTHROPIC-SPECIFIC: Assistant Message Prefilling
+  ─────────────────────────────────────────
+  On Anthropic's Claude API, you can add a fake assistant message
+  to make Claude think it already started writing in a format:
+
+    messages = [
+      {"role": "user", "content": "Generate JSON..."},
+      {"role": "assistant", "content": "```json\n"},  ← PREFILL (Anthropic only)
+    ]
+
+  COMBINED: System prompt constrains format, stop sequence cuts extras.
+  You get EXACTLY the data you want — nothing before, nothing after.
+
+======================================================================
+  DEMO 1: DEFAULT OUTPUT (no prefill, no stop sequence)
+  Problem: markdown wrapping + explanatory text around the JSON
+======================================================================
+
+  Request: Generate an EventBridge rule as JSON
+
+  Raw output:
+  ------------------------------------------------------------------
+  
+
+======================================================================
+  DEMO 2: CLEAN JSON (system prompt + stop sequence)
+  Result: pure JSON, no markdown, no explanations — ready to parse
+======================================================================
+
+  Request: Generate an EventBridge rule as JSON
+
+  Raw output:
+  ------------------------------------------------------------------
+  {
+    "Name": "EC2InstanceRunningRule",
+    "Description": "Captures EC2 instance state change to running",
+    "EventPattern": {
+      "source": ["aws.ec2"],
+      "detail-type": ["EC2 Instance State-change Notification"],
+      "detail": {
+        "state": ["running"]
+      }
+    },
+    "State": "ENABLED",
+    "EventBusName": "default"
+  }
+
+  Parse test:
+    VALID JSON ✓ — parsed successfully with 279 chars
+
+======================================================================
+  DEMO 3: EXACTLY 3 COMMANDS (system prompt + stop sequence)
+  Result: just the commands, no explanations
+======================================================================
+
+  Request: 3 git commands (branch, add, commit)
+
+  Raw output:
+  ------------------------------------------------------------------
+  
+
+======================================================================
+  DEMO 4: CLEAN PYTHON CODE (system prompt + stop sequence)
+  Result: pure code, no comments, no explanations — ready to execute
+======================================================================
+
+  Request: Write a function that checks for duplicate characters
+
+  Raw output:
+  ------------------------------------------------------------------
+  def has_duplicates(s):
+      seen = set()
+      for char in s:
+          if char in seen:
+              return True
+          seen.add(char)
+      return False
+
+======================================================================
+  SUMMARY: WHEN TO USE THESE TECHNIQUES
+======================================================================
+
+  | Use Case                    | System Prompt              | Stop Sequence |
+  |-----------------------------|----------------------------|---------------|
+  | JSON for API pipelines      | Only JSON, no markdown     | ```           |
+  | Python code for execution   | Only code, no comments     | ```           |
+  | Shell commands              | Only commands, one/line    | \n\n          |
+  | CSV data for import         | Only CSV rows              | ```           |
+  | YAML config                 | Only YAML, no markdown     | ```           |
+
+  NOTE: On Anthropic Claude API, also use assistant message prefilling
+  (add fake assistant message like '```json\n' to make it continue in
+  that format). On OpenAI-compatible APIs, system prompts work better.
+
+  KEY INSIGHT:
+  Without these techniques: output needs manual cleanup before use.
+  With these techniques: output goes directly into your pipeline.

@@ -1,0 +1,73 @@
+======================================================================
+  CONVERSATION LOG
+  Date:   2026-05-11 22:42:43
+  Model:  glm-4.5-air
+  API:    ZAI (OpenAI-compatible)
+  Turns:  3
+  Messages: 6
+======================================================================
+
+--- Turn 1 ---
+>>> USER:
+
+What is quantum computing? Give one sentence.
+
+----------------------------------------------------------------------
+
+    ASSISTANT:
+
+Quantum computing leverages the principles of quantum mechanics, such as superposition and entanglement, to perform calculations using quantum bits (qubits) that can exist in multiple states simultaneously, offering the potential for exponentially faster processing for specific problems compared to classical computers.
+
+----------------------------------------------------------------------
+
+--- Turn 2 ---
+>>> USER:
+
+Write another sentence expanding on that.
+
+----------------------------------------------------------------------
+
+    ASSISTANT:
+
+Building on the foundation of qubits, superposition, and entanglement, quantum computing holds the potential to solve certain complex problems, like simulating intricate molecules or breaking current encryption, exponentially faster than classical computers ever could.
+
+----------------------------------------------------------------------
+
+--- Turn 3 ---
+>>> USER:
+
+What did I ask you about in my first message?
+
+----------------------------------------------------------------------
+
+    ASSISTANT:
+
+Your first message asked: **"What is quantum computing? Give one sentence."**  
+
+You requested a concise, one-sentence definition of quantum computing.
+
+----------------------------------------------------------------------
+
+
+======================================================================
+  HOW MULTI-TURN WORKED (what was sent to the API each turn)
+======================================================================
+
+  Turn 1: API received 2 messages:
+    [1] USER: What is quantum computing? Give one sentence.
+    [2] ASSISTANT: Quantum computing leverages the principles of quantum mechanics, such as superpo...
+
+  Turn 2: API received 4 messages:
+    [1] USER: What is quantum computing? Give one sentence.
+    [2] ASSISTANT: Quantum computing leverages the principles of quantum mechanics, such as superpo...
+    [3] USER: Write another sentence expanding on that.
+    [4] ASSISTANT: Building on the foundation of qubits, superposition, and entanglement, quantum c...
+
+  Turn 3: API received 6 messages:
+    [1] USER: What is quantum computing? Give one sentence.
+    [2] ASSISTANT: Quantum computing leverages the principles of quantum mechanics, such as superpo...
+    [3] USER: Write another sentence expanding on that.
+    [4] ASSISTANT: Building on the foundation of qubits, superposition, and entanglement, quantum c...
+    [5] USER: What did I ask you about in my first message?
+    [6] ASSISTANT: Your first message asked: **"What is quantum computing? Give one sentence."**  
+...

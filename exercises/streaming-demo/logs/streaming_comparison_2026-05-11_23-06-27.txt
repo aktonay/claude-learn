@@ -1,0 +1,92 @@
+======================================================================
+  STREAMING vs STANDARD RESPONSE COMPARISON
+  Date: 2026-05-11 23:06:27
+  Model: glm-4.5-air
+======================================================================
+
+  PROMPT USED:
+----------------------------------------------------------------------
+  Write a detailed 5-sentence description of a fictional cyberpunk city. Make it vivid and atmospheric.
+
+======================================================================
+  TEST 1: STANDARD (non-streaming)
+----------------------------------------------------------------------
+
+  Total time:           10.50s
+  Time to first token:  10.50s  (user sees NOTHING until this)
+  Completion tokens:    599
+
+  What the user experiences:
+    0.00s → User sends message
+    ... → User stares at a loading spinner for 10.5s ...
+    10.50s → ENTIRE response appears at once
+
+  Full response:
+  ------------------------------------------------------------------
+  The city stretched endlessly upward, chrome and steel spires clawing at an ozone-choked sky stained perpetual twilight by smog, while below, vast neon canyons pulsed with the chaotic energy of endless data streams and pedestrian crowds. Shantytowns and decrepit tenements clung precariously to the lower flanks of corporate monoliths, their flickering signs reflecting in the slick, acid-scented streets perpetually slick with chemical rain. Holographic advertisements blared from every surface, competing with the roar of ground-cars and the distorted chatter from implant comms, creating a deafening, electric symphony of urban decay and technological overload. Massive, unblinking surveillance drones patrolled the smog-choked airspace like metallic vultures, while flickering holographic billboards promised escape that was forever out of reach for the masses below. The air hung thick with the oppressive weight of corporate control, the metallic tang of ozone, and the dampened, desperate breath of a million souls navigating the neon-drenched, rain-slicked dystopia.
+
+======================================================================
+  TEST 2: STREAMING (chunk-by-chunk)
+----------------------------------------------------------------------
+
+  Total time:           7.04s
+  Time to first chunk:  4.99s  (user sees text IMMEDIATELY)
+  Number of chunks:     223
+
+  What the user experiences:
+    0.00s → User sends message
+    4.99s → First words appear!
+    ...  → Text builds up word by word, live
+    7.04s → Complete response
+
+  Chunk-by-chunk timeline (first 20 chunks):
+  ------------------------------------------------------------------
+      4.99s | chunk   1 | "Here"
+      4.99s | chunk   2 | " is"
+      4.99s | chunk   3 | " a"
+      4.99s | chunk   4 | " vivid"
+      4.99s | chunk   5 | ","
+      4.99s | chunk   6 | " atmospheric"
+      4.99s | chunk   7 | " description"
+      4.99s | chunk   8 | " of"
+      4.99s | chunk   9 | " a"
+      4.99s | chunk  10 | " fictional"
+      4.99s | chunk  11 | " cyber"
+      4.99s | chunk  12 | "punk"
+      4.99s | chunk  13 | " city"
+      4.99s | chunk  14 | " in"
+      4.99s | chunk  15 | " five"
+      4.99s | chunk  16 | " sentences"
+      4.99s | chunk  17 | ":\n\n"
+      4.99s | chunk  18 | "**"
+      4.99s | chunk  19 | "N"
+      4.99s | chunk  20 | "exus"
+    ... (203 more chunks)
+
+  Full response:
+  ------------------------------------------------------------------
+  Here is a vivid, atmospheric description of a fictional cyberpunk city in five sentences:
+  
+  **Nexus Prime** claws at the smog-choked sky, a relentless sprawl of corroded chrome and neon-drenched monoliths piercing perpetual twilight. Below, acid-tinged rain slicks rain-slicked streets choked with discarded tech parts and flickering holographic ads bleeding into the grimy air. The air itself vibrates with the cacophony of hovercars roaring overhead, distorted street vendor chatter, and the subsonic hum of hidden servers, thick with the scent of ozone, stale synth-sushi, and recycled oxygen. Towering corporate fortresses, draped in shimmering holographic logos, loom over sprawling shantytowns where desperate humans scavenge amidst the discarded refuse of the elite, augmented and unaugmented alike. It’s a city that breathes artificiality, a pulsating organism of light and shadow, where the promise of endless data bleeds into the crushing reality of decay, watched over by digital phantoms in the perpetual, neon-soaked gloom.
+
+======================================================================
+  HEAD-TO-HEAD COMPARISON
+======================================================================
+
+  | Metric              | Standard   | Streaming   |
+  |---------------------|------------|-------------|
+  | Time to first text  |    10.50s  |      4.99s   |
+  | Total time          |    10.50s  |      7.04s   |
+  | Chunks delivered    |   1 (bulk) |         223   |
+
+  PERCEIVED speedup: 2.1x faster
+  (User sees text 10.50s sooner with streaming)
+
+  KEY INSIGHT:
+  Total generation time is SIMILAR for both modes.
+  But streaming gives the FIRST token almost immediately,
+  making the experience FEEL dramatically faster.
+
+  When to use each:
+    - STANDARD: batch processing, background jobs, when you need the complete text
+    - STREAMING: chat UIs, real-time apps, anything a user is waiting for

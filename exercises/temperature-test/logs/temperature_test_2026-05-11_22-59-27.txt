@@ -1,0 +1,88 @@
+======================================================================
+  TEMPERATURE TEST RESULTS
+  Date: 2026-05-11 22:59:27
+  Model: glm-4.5-air
+  Prompt: "Give me a one-sentence movie idea."
+  Runs per temperature: 3
+======================================================================
+
+  HOW TEMPERATURE WORKS:
+----------------------------------------------------------------------
+  Temperature controls how the model picks the next token (word).
+
+  At each step, the model calculates probabilities for possible
+  next tokens. Temperature adjusts those probabilities:
+
+    temp=0.0 → Always picks the highest-probability token (deterministic)
+    temp=0.5 → Some variation, mostly follows top probabilities
+    temp=1.0 → Spreads probability evenly, more random/creative picks
+
+  You'll see below: at temp=0.0 all responses are similar.
+  At temp=1.0 responses are wildly different from each other.
+
+======================================================================
+  TEMPERATURE: 0.0  (LOW — predictable, factual, deterministic)
+======================================================================
+
+  Run 1: 
+
+  Run 2: 
+
+  Run 3: 
+
+======================================================================
+  TEMPERATURE: 0.3  (LOW — predictable, factual, deterministic)
+======================================================================
+
+  Run 1: 
+
+  Run 2: 
+
+  Run 3: 
+
+======================================================================
+  TEMPERATURE: 0.5  (MEDIUM — balanced, some variety)
+======================================================================
+
+  Run 1: 
+
+  Run 2: 
+
+  Run 3: 
+
+======================================================================
+  TEMPERATURE: 0.7  (MEDIUM — balanced, some variety)
+======================================================================
+
+  Run 1: 
+
+  Run 2: 
+
+  Run 3: 
+
+======================================================================
+  TEMPERATURE: 1.0  (HIGH — creative, varied, unpredictable)
+======================================================================
+
+  Run 1: 
+
+  Run 2: 
+
+  Run 3: 
+
+======================================================================
+  ANALYSIS: What to look for
+======================================================================
+
+  1. CONSISTENCY across runs:
+     - At temp=0.0: all runs should be nearly identical
+     - At temp=1.0: each run should be different
+
+  2. CREATIVITY level:
+     - At temp=0.0: safe, predictable movie ideas
+     - At temp=1.0: wild, unexpected, creative ideas
+
+  3. When to use what:
+     - temp=0.0-0.3: coding, facts, data extraction, moderation
+     - temp=0.4-0.7: summarization, education, problem-solving
+     - temp=0.8-1.0: brainstorming, creative writing, marketing

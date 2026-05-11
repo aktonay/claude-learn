@@ -9,7 +9,7 @@
 # They live in .claude/skills/<skill-name>/SKILL.md
 # Claude matches user requests against the skill's description to decide when to activate it.
 
-Four skills in `.claude/skills/`:
+Five skills in `.claude/skills/`:
 
 1. **pr-description** — generates PR descriptions from git diff
    - `allowed-tools: Bash, Read, Grep, Glob` (restricts to read-only + bash for git commands)
@@ -33,6 +33,12 @@ Four skills in `.claude/skills/`:
    - `references/loading-fixes.md` — fixes for skills that don't load
    - `references/priority-fixes.md` — fixes for priority conflicts and wrong-skill-used
    - `references/runtime-fixes.md` — fixes for permission denied, path issues, missing deps
+
+5. **system-prompt-builder** — builds project-specific system prompts
+   - Saves prompts to `.claude/system-prompts/<project>.md` (version-controlled)
+   - `references/prompt-templates.md` — ready-made templates by role (engineer, tutor, reviewer, writer)
+   - `references/best-practices.md` — 4-dimension framework (Role, Behavior, Constraints, Style)
+   - `references/api-patterns.md` — OpenAI vs Anthropic system prompt patterns
 
 ## Claude Code Customization Layers
 
@@ -63,12 +69,13 @@ Four skills in `.claude/skills/`:
 # Subagents are isolated execution contexts — they run tasks independently and return results.
 # IMPORTANT: Subagents do NOT automatically see skills. You MUST explicitly list them.
 
-Four agents in `.claude/agents/`:
+Five agents in `.claude/agents/`:
 
 1. **pr-reviewer** — uses `pr-description` skill, produces structured PR descriptions + flags issues
 2. **codebase-explainer** — uses `codebase-onboarding` skill, guides new devs through architecture/conventions
 3. **accessibility-auditor** — uses `accessibility-audit` skill, runs full a11y scan with structured report
 4. **skill-troubleshooter-agent** — uses `skill-troubleshooter` skill, runs validator + provides targeted fixes
+5. **system-prompt-builder-agent** — uses `system-prompt-builder` skill, creates/tests project prompts
 
 ### Subagent Rules
 
@@ -89,3 +96,18 @@ Four agents in `.claude/agents/`:
 
 - No emojis unless requested
 - Concise responses preferred
+
+## Exercises
+
+# Hands-on exercises in exercises/ folder, each self-contained:
+- `exercises/multi-turn-chatbot/` — multi-turn conversation with helper functions + log saving
+- `exercises/system-prompts/` — system prompt comparison test (with vs without) + results saved to txt
+- `exercises/temperature-test/` — temperature sweep (0.0 to 1.0) with same prompt, results saved to txt
+- `exercises/streaming-demo/` — streaming vs standard response comparison with chunk-by-chunk timeline
+- `exercises/structured-output/` — prefilling + stop sequences for clean JSON/code/commands (no commentary)
+
+## API Configuration
+
+# ZAI API key lives in root .env (gitignored)
+# Base URL: https://api.z.ai/api/coding/paas/v4/
+# Available models: glm-4.5, glm-4.5-air, glm-4.6, glm-4.7, glm-5, glm-5-turbo, glm-5.1

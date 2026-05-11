@@ -1,0 +1,155 @@
+======================================================================
+  STRUCTURED OUTPUT TECHNIQUES COMPARISON
+  Date: 2026-05-11 23:16:01
+  Model: glm-4.5-air
+======================================================================
+
+  HOW IT WORKS:
+----------------------------------------------------------------------
+
+  TECHNIQUE 1: Assistant Message Prefilling
+  ─────────────────────────────────────────
+  You add a fake 'assistant' message before the API responds.
+  The model thinks it ALREADY started writing, so it CONTINUES
+  in that format instead of starting fresh with commentary.
+
+    messages = [
+      {"role": "user", "content": "Generate JSON..."},
+      {"role": "assistant", "content": "```json\n"},  ← PREFILL
+    ]
+
+  TECHNIQUE 2: Stop Sequences
+  ─────────────────────────────────────────
+  You specify a string that triggers IMMEDIATE stop of generation.
+  When the model generates that string, output is cut off right there.
+
+    response = client.chat.completions.create(
+        ..., stop=["```"]  ← STOP SEQUENCE
+    )
+
+  COMBINED: Prefill opens the format, stop sequence closes it.
+  You get EXACTLY the data you want — nothing before, nothing after.
+
+======================================================================
+  DEMO 1: DEFAULT OUTPUT (no prefill, no stop sequence)
+  Problem: markdown wrapping + explanatory text around the JSON
+======================================================================
+
+  Request: Generate an EventBridge rule as JSON
+
+  Raw output:
+  ------------------------------------------------------------------
+  Here's a concise EventBridge rule in JSON format that captures EC2 instance state changes when instances start running:
+  
+  ```json
+  {
+    "EventPattern": {
+      "source": ["aws.ec2"],
+      "detail-type": ["EC2 Instance State-change Notification"],
+      "detail": {
+        "state": ["running"]
+      }
+    },
+    "State": "ENABLED"
+  }
+  ```
+  
+  ### Key components explained:
+  1. **`source`:** Identifies the event source as AWS EC2 (`aws.ec2`)
+  2. **`detail-type`:** Matches state change notifications (`EC2 Instance State-change Notification`)
+  3. **`detail.state`:** Filters for instances entering the `running` state
+  4. **`State`:** Sets the rule as `ENABLED` by default
+  
+  ### How it works:
+  - Triggers when an EC2 instance transitions to `running` state
+  - Captures events like:
+    - Instance launches (`run-instances`)
+    - Instance stops and restarts (`start-instances`)
+    - State recoveries after failures
+  - Excludes:
+    - Terminations (`terminated` state)
+    - Shutdowns (`stopping`/`stopped` states)
+    - Scheduling events
+  
+  To use this:
+  1. Replace `your_rule_name` when creating the rule via AWS CLI/Console
+  2. Configure targets (e.g., SNS, Lambda, SQS) for the actions to take
+  3. Ensure the execution role has required permissions (e.g., `events:PutRule`, `events:PutTargets`)
+  
+  Example CLI command to create the rule:
+  ```bash
+  aws events put-rule \
+    --name ec2-running-termination-watch \
+    --event-pattern '{
+      "source": ["aws.ec2"],
+      "detail-type": ["EC2 Instance State-change Notification"],
+      "detail": { "state": ["running"] }
+    }'
+  ```
+
+======================================================================
+  DEMO 2: CLEAN JSON (prefill='```json\n' + stop='```')
+  Result: pure JSON, no markdown, no explanations — ready to parse
+======================================================================
+
+  Request: Generate an EventBridge rule as JSON
+
+  Raw output:
+  ------------------------------------------------------------------
+  Here's a concise EventBridge rule in JSON format that triggers on EC2 instance state changes when instances transition to "running":
+  
+  
+
+  Parse test:
+    INVALID JSON ✗ — Expecting value: line 1 column 1 (char 0)
+
+======================================================================
+  DEMO 3: EXACTLY 3 COMMANDS (prefill='1. ' + stop=['\n\n','Here','Note'])
+  Result: just the commands, no explanations
+======================================================================
+
+  Request: 3 git commands (branch, add, commit)
+
+  Raw output:
+  ------------------------------------------------------------------
+  
+
+======================================================================
+  DEMO 4: CLEAN PYTHON CODE (prefill='```python\n' + stop='```')
+  Result: pure code, no comments, no explanations — ready to execute
+======================================================================
+
+  Request: Write a function that checks for duplicate characters
+
+  Raw output:
+  ------------------------------------------------------------------
+  
+  To solve this problem, we need to determine if a given string contains any duplicate characters. The solution should efficiently check for duplicates and return `True` if any are found, otherwise `False`.
+  
+  ### Approach
+  The approach involves using a set data structure to keep track of characters encountered so far. As we iterate through each character in the string:
+  1. If the character is already in the set, it means we've found a duplicate, so we immediately return `True`.
+  2. Otherwise, we add the character to the set and continue.
+  3. If the loop completes without finding any duplicates, we return `False`.
+  
+  This approach efficiently checks for duplicates in linear time, O(n), where n is the length of the string. The space complexity is O(1) if the character set is fixed (like ASCII), but in the worst case (e.g., Unicode), it could be O(k), where k is the number of distinct characters.
+  
+  ### Solution Code
+  
+
+======================================================================
+  SUMMARY: WHEN TO USE THESE TECHNIQUES
+======================================================================
+
+  | Use Case                    | Prefill          | Stop Sequence |
+  |-----------------------------|------------------|---------------|
+  | JSON for API pipelines      | ```json\n        | ```           |
+  | Python code for execution   | ```python\n      | ```           |
+  | CSV data for import         | ```csv\n         | ```           |
+  | Shell commands              | 1. or $          | \n\n          |
+  | YAML config                 | ```yaml\n        | ```           |
+  | Any markdown-wrapped format | ```<format>\n    | ```           |
+
+  KEY INSIGHT:
+  Without these techniques: output needs manual cleanup before use.
+  With these techniques: output goes directly into your pipeline.

@@ -1,0 +1,156 @@
+======================================================================
+  STRUCTURED OUTPUT TECHNIQUES COMPARISON
+  Date: 2026-05-11 23:18:27
+  Model: glm-4.5-air
+======================================================================
+
+  HOW IT WORKS:
+----------------------------------------------------------------------
+
+  TECHNIQUE 1: System Prompt Enforcement
+  ─────────────────────────────────────────
+  A strict system message tells the model EXACTLY what to output.
+  'Output ONLY JSON. No markdown. No explanation. Start with {. End with }.'
+  This constrains the model's output format before it even starts.
+
+    messages = [
+      {"role": "system", "content": "Output ONLY valid JSON..."},
+      {"role": "user", "content": "Generate JSON..."},
+    ]
+
+  TECHNIQUE 2: Stop Sequences
+  ─────────────────────────────────────────
+  You specify a string that triggers IMMEDIATE stop of generation.
+  When the model generates that string, output is cut off right there.
+  Safety net in case the model tries to add commentary.
+
+    response = client.chat.completions.create(
+        ..., stop=["```", "Explanation"]  ← STOP SEQUENCE
+    )
+
+  ANTHROPIC-SPECIFIC: Assistant Message Prefilling
+  ─────────────────────────────────────────
+  On Anthropic's Claude API, you can add a fake assistant message
+  to make Claude think it already started writing in a format:
+
+    messages = [
+      {"role": "user", "content": "Generate JSON..."},
+      {"role": "assistant", "content": "```json\n"},  ← PREFILL (Anthropic only)
+    ]
+
+  COMBINED: System prompt constrains format, stop sequence cuts extras.
+  You get EXACTLY the data you want — nothing before, nothing after.
+
+======================================================================
+  DEMO 1: DEFAULT OUTPUT (no prefill, no stop sequence)
+  Problem: markdown wrapping + explanatory text around the JSON
+======================================================================
+
+  Request: Generate an EventBridge rule as JSON
+
+  Raw output:
+  ------------------------------------------------------------------
+  Here's a concise EventBridge rule in JSON format that triggers when EC2 instances start running:
+  
+  ```json
+  {
+    "source": ["aws.ec2"],
+    "detail-type": ["EC2 Instance State-change Notification"],
+    "detail": {
+      "state": ["running"]
+    }
+  }
+  ```
+  
+  **Key components explained:**
+  1. `"source": ["aws.ec2"]` - Filters events from AWS EC2 service
+  2. `"detail-type": ["EC2 Instance State-change Notification"]` - Matches EC2 state change events
+  3. `"detail": {"state": ["running"]}` - Targets only instances transitioning to the "running" state
+  
+  **Important notes:**
+  - Uses the default event bus (no `EventBusName` specified)
+  - Matches all regions (add `"region": ["us-east-1"]` if region-specific)
+  - Targets all instances (add account-specific filters if needed)
+  
+  To use this:
+  1. Create a new EventBridge rule
+  2. Paste this JSON as the event pattern
+  3. Configure targets (e.g., Lambda, SQS, SNS) in the rule
+  
+  Example of a complete rule definition (with targets):
+  ```json
+  {
+    "EventBusName": "default",
+    "Description": "Trigger when EC2 instances start",
+    "EventPattern": {
+      "source": ["aws.ec2"],
+      "detail-type": ["EC2 Instance State-change Notification"],
+      "detail": {
+        "state": ["running"]
+      }
+    },
+    "State": "ENABLED",
+    "Targets": [
+      {
+        "Arn": "arn:aws:lambda:us-east-1:123456789012:function:my-function",
+        "Id": "Target1"
+      }
+    ]
+  }
+  ```
+
+======================================================================
+  DEMO 2: CLEAN JSON (system prompt + stop sequence)
+  Result: pure JSON, no markdown, no explanations — ready to parse
+======================================================================
+
+  Request: Generate an EventBridge rule as JSON
+
+  Raw output:
+  ------------------------------------------------------------------
+  
+
+  Parse test:
+    INVALID JSON ✗ — Expecting value: line 1 column 1 (char 0)
+
+======================================================================
+  DEMO 3: EXACTLY 3 COMMANDS (system prompt + stop sequence)
+  Result: just the commands, no explanations
+======================================================================
+
+  Request: 3 git commands (branch, add, commit)
+
+  Raw output:
+  ------------------------------------------------------------------
+  
+
+======================================================================
+  DEMO 4: CLEAN PYTHON CODE (system prompt + stop sequence)
+  Result: pure code, no comments, no explanations — ready to execute
+======================================================================
+
+  Request: Write a function that checks for duplicate characters
+
+  Raw output:
+  ------------------------------------------------------------------
+  
+
+======================================================================
+  SUMMARY: WHEN TO USE THESE TECHNIQUES
+======================================================================
+
+  | Use Case                    | System Prompt              | Stop Sequence |
+  |-----------------------------|----------------------------|---------------|
+  | JSON for API pipelines      | Only JSON, no markdown     | ```           |
+  | Python code for execution   | Only code, no comments     | ```           |
+  | Shell commands              | Only commands, one/line    | \n\n          |
+  | CSV data for import         | Only CSV rows              | ```           |
+  | YAML config                 | Only YAML, no markdown     | ```           |
+
+  NOTE: On Anthropic Claude API, also use assistant message prefilling
+  (add fake assistant message like '```json\n' to make it continue in
+  that format). On OpenAI-compatible APIs, system prompts work better.
+
+  KEY INSIGHT:
+  Without these techniques: output needs manual cleanup before use.
+  With these techniques: output goes directly into your pipeline.

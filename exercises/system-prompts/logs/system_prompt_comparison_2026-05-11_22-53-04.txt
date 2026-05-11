@@ -1,0 +1,109 @@
+======================================================================
+  SYSTEM PROMPT COMPARISON TEST
+  Date: 2026-05-11 22:53:04
+  Model: glm-4.5-air
+======================================================================
+
+  THE QUESTION:
+----------------------------------------------------------------------
+  How do I solve 5x + 2 = 3 for x?
+
+======================================================================
+  THE SYSTEM PROMPT (only used in Test 2):
+----------------------------------------------------------------------
+  You are a patient math tutor.
+  Do not directly answer a student's questions.
+  Guide them to a solution step by step.
+  Ask questions to make the student think.
+  Give hints, not solutions.
+
+======================================================================
+  TEST 1: WITHOUT SYSTEM PROMPT (default behavior)
+  Expected: Direct answer with full solution
+======================================================================
+
+  To solve the equation \(5x + 2 = 3\) for \(x\), follow these steps:
+  
+  1. **Isolate the term containing \(x\):**  
+     Subtract 2 from both sides of the equation to move the constant term to the right side.  
+     \[
+     5x + 2 - 2 = 3 - 2
+     \]  
+     Simplify:  
+     \[
+     5x = 1
+     \]
+  
+  2. **Solve for \(x\):**  
+     Divide both sides by 5 to isolate \(x\).  
+     \[
+     \frac{5x}{5} = \frac{1}{5}
+     \]  
+     Simplify:  
+     \[
+     x = \frac{1}{5}
+     \]
+  
+  **Verification:**  
+  Substitute \(x = \frac{1}{5}\) back into the original equation to check:  
+  \[
+  5 \left( \frac{1}{5} \right) + 2 = 1 + 2 = 3
+  \]  
+  The result is 3, which matches the right side of the equation. Thus, the solution is correct.
+  
+  The solution is \(x = \frac{1}{5}\). This can also be expressed as \(x = 0.2\) in decimal form, but the fraction is exact and preferred unless specified otherwise.
+
+======================================================================
+  TEST 2: WITH SYSTEM PROMPT (math tutor persona)
+  Expected: Guiding questions, hints, no direct answer
+======================================================================
+
+  To solve the equation \(5x + 2 = 3\) for \(x\), follow these steps:
+  
+  1. **Isolate the term containing \(x\)**:  
+     Subtract 2 from both sides to move the constant term to the right side:  
+     \[
+     5x + 2 - 2 = 3 - 2
+     \]  
+     Simplify:  
+     \[
+     5x = 1
+     \]
+  
+  2. **Solve for \(x\)**:  
+     Divide both sides by 5 to isolate \(x\):  
+     \[
+     \frac{5x}{5} = \frac{1}{5}
+     \]  
+     Simplify:  
+     \[
+     x = \frac{1}{5}
+     \]
+  
+  **Verification**:  
+  Substitute \(x = \frac{1}{5}\) back into the original equation to check:  
+  \[
+  5 \left( \frac{1}{5} \right) + 2 = 1 + 2 = 3
+  \]  
+  The left side equals the right side (3 = 3), so the solution is correct.
+  
+  Thus, the solution is:  
+  \[
+  \boxed{x = \frac{1}{5}}
+  \]
+
+======================================================================
+  ANALYSIS: What changed?
+======================================================================
+
+  WITHOUT system prompt:
+    - Claude gives a complete step-by-step solution immediately
+    - Student doesn't need to think — just reads the answer
+
+  WITH system prompt (math tutor):
+    - Claude asks guiding questions instead of giving answers
+    - Student is prompted to think and participate
+    - Response style matches a real tutor, not a calculator
+
+  This is why system prompts matter — same question, completely
+  different behavior. You control HOW Claude responds, not just WHAT.
