@@ -1,0 +1,185 @@
+======================================================================
+  PROMPT EVALUATION REPORT
+  Date: 2026-05-12 10:42:14
+  Model: glm-4.5-air
+  Dataset size: 3 test cases
+======================================================================
+
+======================================================================
+  METHODOLOGY
+======================================================================
+
+  Two prompt versions tested on the same dataset:
+
+  PROMPT V1 (naive):
+    "Please solve the following task: {task}"
+    No formatting instructions. No constraints.
+
+  PROMPT V2 (improved):
+    Explicit format rules + assistant prefilling + stop sequence.
+    "Respond only with Python, JSON, or Regex. No comments. No markdown."
+    Prefills assistant with backtick to steer code output.
+    Uses stop sequence to cut off markdown wrapping.
+
+  GRADING (each output gets TWO scores averaged together):
+
+  CODE GRADER (syntax validation):
+    JSON  -> json.loads() — returns 10 (valid) or 0 (invalid)
+    Python -> ast.parse()  — returns 10 (valid) or 0 (invalid)
+    Regex -> re.compile()  — returns 10 (valid) or 0 (invalid)
+    Fast, free, deterministic. Checks STRUCTURE only.
+
+  MODEL GRADER (quality evaluation):
+    Sends output to API with eval prompt asking for:
+    - strengths (1-3 items)
+    - weaknesses (1-3 items)
+    - reasoning (why this score)
+    - score (1-10)
+    Uses solution_criteria from test case for targeted evaluation.
+    Flexible but costs an API call. Checks QUALITY.
+
+  COMBINED SCORE = (syntax_score + model_score) / 2
+
+======================================================================
+  SUMMARY
+======================================================================
+
+  | Metric              | V1 (naive)   | V2 (improved) | Delta    |
+  |---------------------|--------------|---------------|----------|
+  | Combined Score      |        3.7   |         5.2   |   +1.5   |
+  | Syntax Score        |        6.7   |         6.7   |   +0.0   |
+  | Model Score         |        0.7   |         3.7   |   +3.0   |
+
+  RESULT: V2 is BETTER by 1.5 points on average.
+
+======================================================================
+  TEST CASE 1/3
+======================================================================
+
+  Task: Parse AWS CloudWatch log event timestamps in ISO 8601 format and return them in Unix epoch format
+  Expected format: python
+  Solution criteria: The function should convert AWS CloudWatch log timestamps (e.g., '2023-01-01T12:34:56.789Z') to Unix epoch seconds (e.g., 1672578896.789). Handle time zone conversion correctly.
+
+----------------------------------------------------------------------
+  PROMPT V1 OUTPUT (naive):
+----------------------------------------------------------------------
+
+  
+
+  Syntax score: 10/10
+  Model score:  1/10
+  Combined:     5.5/10
+  Reasoning:    The solution is entirely empty and provides no code or logic to perform the required timestamp conversion. Since the task specifically requires parsing CloudWatch log timestamps and converting them to epoch format with proper timezone handling, the absence of any implementation completely fails to meet the criteria.
+  Strengths:    
+  Weaknesses:   No implementation provided to parse ISO 8601 timestamps, No code for timezone conversion to Unix epoch, Missing error handling for invalid timestamp formats
+
+----------------------------------------------------------------------
+  PROMPT V2 OUTPUT (improved):
+----------------------------------------------------------------------
+
+  
+
+  Syntax score: 10/10
+  Model score:  1/10
+  Combined:     5.5/10
+  Reasoning:    The solution is completely empty and fails to address the core task of parsing ISO 8601 CloudWatch timestamps and converting them to Unix epoch format. No code exists to handle timezone conversion (critical for 'Z' UTC suffix) or perform timestamp conversion.
+  Strengths:    
+  Weaknesses:   No implementation provided, No time zone conversion handling, No Unix epoch conversion logic
+
+======================================================================
+  TEST CASE 2/3
+======================================================================
+
+  Task: Generate a JSON object representing an AWS IAM policy allowing read-only access to all S3 buckets
+  Expected format: json
+  Solution criteria: The JSON must be valid and contain a 'Version', 'Statement' with 'Effect: Allow', 'Action: s3:GetObject', 's3:ListBucket', and 'Resource' set to '*' for simplicity. Use AWS IAM policy structure exactly.
+
+----------------------------------------------------------------------
+  PROMPT V1 OUTPUT (naive):
+----------------------------------------------------------------------
+
+  
+
+  Syntax score: 0/10
+  Model score:  1/10
+  Combined:     0.5/10
+  Reasoning:    The solution is entirely empty and fails to provide any IAM policy content, making it invalid and unusable for the task.
+  Strengths:    
+  Weaknesses:   Completely missing required policy structure, No version, statement, effect, action, or resource fields
+
+----------------------------------------------------------------------
+  PROMPT V2 OUTPUT (improved):
+----------------------------------------------------------------------
+
+  
+
+  Syntax score: 0/10
+  Model score:  5/10
+  Combined:     2.5/10
+  Reasoning:    Fallback: grader returned non-JSON output
+  Strengths:    N/A
+  Weaknesses:   Grader output could not be parsed as JSON
+
+======================================================================
+  TEST CASE 3/3
+======================================================================
+
+  Task: Create a regex pattern to validate AWS S3 bucket names according to AWS naming rules
+  Expected format: regex
+  Solution criteria: The regex must match valid bucket names (3-63 chars, lowercase letters/numbers/dots/hyphens, start/end with letter/number, no consecutive dots). Should reject invalid names like 'my--bucket' or 'a.b..c'.
+
+----------------------------------------------------------------------
+  PROMPT V1 OUTPUT (naive):
+----------------------------------------------------------------------
+
+  
+
+  Syntax score: 10/10
+  Model score:  0/10
+  Combined:     5.0/10
+  Reasoning:    The solution is completely empty and contains no regex pattern or implementation for validating AWS S3 bucket names. It fails to address any of the specified requirements for length, character set, start/end characters, or consecutive dot restrictions.
+  Strengths:    
+  Weaknesses:   No regex pattern provided, Fails to implement validation logic, Missing all AWS S3 naming rule checks
+
+----------------------------------------------------------------------
+  PROMPT V2 OUTPUT (improved):
+----------------------------------------------------------------------
+
+  
+
+  Syntax score: 10/10
+  Model score:  5/10
+  Combined:     7.5/10
+  Reasoning:    Fallback: grader returned non-JSON output
+  Strengths:    N/A
+  Weaknesses:   Grader output could not be parsed as JSON
+
+======================================================================
+  KEY TAKEAWAYS
+======================================================================
+
+  1. PROMPT EVALUATION = OBJECTIVE MEASUREMENT
+     Instead of 'this prompt feels better', you get numbers.
+     V1 scored X/10, V2 scored Y/10 — clear, comparable, trackable.
+
+  2. TWO GRADER TYPES COVER DIFFERENT ASPECTS
+     Code grader: 'Is the syntax valid?' (binary, deterministic)
+     Model grader: 'Is the solution correct and helpful?' ( nuanced)
+     Neither alone gives the full picture. Combined = comprehensive.
+
+  3. ITERATION IS THE POINT
+     V1 is your baseline. V2 is your first improvement.
+     The delta between them proves whether your changes helped.
+     Keep iterating: V3, V4, V5... until scores plateau.
+
+  4. DATASET QUALITY MATTERS
+     3 test cases is minimal. Production evals use 50-200+ cases.
+     Include edge cases, ambiguous inputs, and realistic scenarios.
+     The dataset IS your test suite for prompts.
+
+  5. THE THREE OPTIONS AFTER WRITING A PROMPT:
+     Option 1: Test once, ship it.    (risky — breaks in production)
+     Option 2: Test a few times, tweak. (better — still misses edge cases)
+     Option 3: Run through eval pipeline. (best — objective metrics)
+
+  This exercise implements Option 3.
