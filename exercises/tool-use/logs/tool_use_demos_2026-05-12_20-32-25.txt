@@ -1,0 +1,169 @@
+======================================================================
+  TOOL USE EXERCISE — REMINDER SYSTEM
+  Date: 2026-05-12 20:32:25
+  Model: glm-4.5-air
+======================================================================
+
+  HOW TOOL CALLING WORKS (OpenAI-compatible API):
+----------------------------------------------------------------------
+
+  THE FLOW:
+  1. You send a user message + tool schemas to the model
+  2. Model decides if it needs external data to answer
+  3. If yes: model returns finish_reason='tool_calls'
+     with a tool_calls list: [{id, function: {name, arguments}}]
+  4. Your code executes each tool function
+  5. You send tool results back as: {role: 'tool', tool_call_id, content}
+  6. Model uses results to either:
+     a. Call more tools (loop back to step 2)
+     b. Give a final text answer (finish_reason='stop')
+
+  THE 3 TOOLS:
+  ┌─────────────────────────┬────────────────────────────────────┐
+  │ Tool                    │ Purpose                            │
+  ├─────────────────────────┼────────────────────────────────────┤
+  │ get_current_datetime    │ Returns current date/time          │
+  │ add_duration_to_datetime│ Adds days/hours/min to a datetime  │
+  │ set_reminder            │ Records reminder with target time  │
+  └─────────────────────────┴────────────────────────────────────┘
+
+  WHY TOOLS ARE NEEDED:
+  - Model doesn't know EXACT current time → tool 1 fixes this
+  - Model struggles with complex date math → tool 2 fixes this
+  - Model can't actually SET anything → tool 3 fixes this
+
+  KEY INSIGHT:
+  The model decides WHAT tools to call and in WHAT ORDER.
+  Your job is to provide the implementations.
+  This is the 'agentic loop' pattern used in all AI agent systems.
+
+======================================================================
+  DEMO 1: SINGLE TOOL — Get current time
+  Model calls one tool (get_current_datetime) and returns the answer.
+======================================================================
+
+  User request: What time is it right now? Please give me the exact time formatted as HH:MM:SS.
+  Turns taken: 2
+  Tool calls made: 1
+
+  Conversation trace:
+----------------------------------------------------------------------
+  [1] USER:
+      What time is it right now? Please give me the exact time formatted as HH:MM:SS.
+
+  [2] ASSISTANT:
+      Text: 
+
+      Tool Call: get_current_datetime({"date_format":"%H:%M:%S"})
+
+  [3] TOOL RESULT:
+      20:32:01
+
+  [4] ASSISTANT:
+      Text: 
+The current time is **20:32:01** (in HH:MM:SS format).
+
+  Final answer: The current time is **20:32:01** (in HH:MM:SS format).
+
+======================================================================
+  DEMO 2: TOOL CHAINING — Calculate a future date
+  Model chains 2 tools: get time, then add 103 days.
+======================================================================
+
+  User request: What day is 103 days from today?
+  Turns taken: 3
+  Tool calls made: 2
+
+  Conversation trace:
+----------------------------------------------------------------------
+  [1] USER:
+      What day is 103 days from today?
+
+  [2] ASSISTANT:
+      Text: 
+I'll help you find out what day it will be 103 days from today. Let me calculate that for you.
+
+      Tool Call: get_current_datetime({"date_format":"%Y-%m-%d"})
+
+  [3] TOOL RESULT:
+      2026-05-12
+
+  [4] ASSISTANT:
+      Text: 
+
+      Tool Call: add_duration_to_datetime({"start_datetime":"2026-05-12","date_format":"%Y-%m-%d","days":103})
+
+  [5] TOOL RESULT:
+      2026-08-23
+
+  [6] ASSISTANT:
+      Text: 
+103 days from today (May 12, 2026) will be **August 23, 2026**.
+
+  Final answer: 103 days from today (May 12, 2026) will be **August 23, 2026**.
+
+======================================================================
+  DEMO 3: FULL PIPELINE — Set a reminder
+  Model chains all 3 tools: get time → add 7 days → set reminder.
+======================================================================
+
+  User request: Set a reminder for my doctor's appointment. It's a week from today at 2:30 PM. The reminder text should say 'Doctor appointment'.
+  Turns taken: 3
+  Tool calls made: 2
+
+  Conversation trace:
+----------------------------------------------------------------------
+  [1] USER:
+      Set a reminder for my doctor's appointment. It's a week from today at 2:30 PM. The reminder text should say 'Doctor appointment'.
+
+  [2] ASSISTANT:
+      Text: 
+I'll help you set a reminder for your doctor's appointment. First, let me get the current date and time to calculate when exactly a week from today at 2:30 PM will be.
+
+      Tool Call: get_current_datetime({})
+
+  [3] TOOL RESULT:
+      2026-05-12 20:32:15
+
+  [4] ASSISTANT:
+      Text: 
+
+      Tool Call: set_reminder({"reminder_text":"Doctor appointment","reminder_datetime":"2026-05-19 14:30:00"})
+
+  [5] TOOL RESULT:
+      {
+      "status": "reminder_set",
+      "reminder": {
+            "text": "Doctor appointment",
+            "datetime": "2026-05-19 14:30:00",
+            "parsed_datetime": "2026-05-19T14:30:00",
+            "set_at": "2026-05-12T20:32:21.868848"
+      },
+      "total_reminders": 1
+}
+
+  [6] ASSISTANT:
+      Text: 
+Great! I've set your reminder successfully. Your doctor's appointment reminder is scheduled for **May 19, 2026 at 2:30 PM** with the text "Doctor appointment". The reminder has been created and will notify you at that time.
+
+  Final answer: Great! I've set your reminder successfully. Your doctor's appointment reminder is scheduled for **May 19, 2026 at 2:30 PM** with the text "Doctor appointment". The reminder has been created and will notify you at that time.
+
+  Reminders set: 1
+    - "Doctor appointment" at 2026-05-19 14:30:00
+
+======================================================================
+  SUMMARY
+======================================================================
+
+  | Demo | Scenario       | Tools Called                          | Turns |
+  |------|-----------------|---------------------------------------|-------|
+  | 1    | Current time    | get_current_datetime                  | 1     |
+  | 2    | Future date     | get_current → add_duration            | 2     |
+  | 3    | Set reminder    | get_current → add_duration → reminder | 2-3   |
+
+  PATTERN FOR ADDING NEW TOOLS:
+  1. Write the Python function (tool_functions.py)
+  2. Write the JSON schema (tool_functions.py)
+  3. Add routing in run_tool() (tool_functions.py)
+  4. Add schema to ALL_TOOL_SCHEMAS list (tool_functions.py)
+  That's it — the conversation loop handles everything else.

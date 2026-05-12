@@ -105,6 +105,7 @@ Five agents in `.claude/agents/`:
 - `exercises/temperature-test/` — temperature sweep (0.0 to 1.0) with same prompt, results saved to txt
 - `exercises/streaming-demo/` — streaming vs standard response comparison with chunk-by-chunk timeline
 - `exercises/structured-output/` — prefilling + stop sequences for clean JSON/code/commands (no commentary)
+- `exercises/tool-use/` — multi-turn tool calling loop: 3 tools (datetime, date math, reminders), agentic chaining pattern, conversation trace logs
 - `exercises/prompt-eval/` — full evaluation pipeline: dataset generation, V1 vs V2 prompts, code grader (syntax) + model grader (quality), combined scoring with formatted report
 - `exercises/prompt-eval-engineering/` — iterative prompt engineering: 4 techniques (be clear, be specific, XML tags, provide examples) measured step-by-step with HTML visual report
 
