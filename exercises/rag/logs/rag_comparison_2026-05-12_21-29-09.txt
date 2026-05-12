@@ -1,0 +1,239 @@
+======================================================================
+  RAG PIPELINE COMPARISON
+  Semantic vs Lexical vs Hybrid Search
+  Date: 2026-05-12 21:29:09
+======================================================================
+
+  THE RAG PIPELINE:
+----------------------------------------------------------------------
+
+  Step 1: CHUNK the document into smaller pieces
+  Step 2: EMBED each chunk (text -> numbers via VoyageAI)
+  Step 3: STORE embeddings in a vector database
+  Step 4: EMBED the user's query
+  Step 5: SEARCH for most similar chunks
+  Step 6: GENERATE answer from top chunks + query via LLM
+
+  THREE SEARCH STRATEGIES COMPARED:
+
+  +------------+--------------------------------+--------------------------------+
+  | Strategy   | Strength                       | Weakness                       |
+  +------------+--------------------------------+--------------------------------+
+  | Semantic   | Understands MEANING/CONTEXT    | Misses exact term matches      |
+  | (Vector)   | 'accomplish' -> project work   | 'INC-2023-Q4-011' -> ?         |
+  +------------+--------------------------------+--------------------------------+
+  | Lexical    | Finds EXACT TERM matches       | No understanding of synonyms   |
+  | (BM25)     | 'INC-2023-Q4-011' -> found!    | 'accomplish' != 'achieved'     |
+  +------------+--------------------------------+--------------------------------+
+  | Hybrid     | BEST of both via RRF fusion    | More complex to implement      |
+  | (Retriever)| Meaning + exact matches        | Two indexes to maintain        |
+  +------------+--------------------------------+--------------------------------+
+
+  RECIPROCAL RANK FUSION (RRF):
+  RRF_score(doc) = sum( 1 / (k + rank) ) for each index
+  Merges ranked lists without needing score normalization.
+  Docs that rank well in MULTIPLE indexes get boosted.
+
+======================================================================
+  DOCUMENT CHUNKS
+======================================================================
+
+  Chunk 1 (28 chars): # 2024 Annual Company Report...
+  Chunk 2 (157 chars): ## Table of Contents  1. Executive Summary 2. Medical Research Division 3. Software Engineering Division 4. Financial An...
+  Chunk 3 (503 chars): ## Section 1: Executive Summary  This year marked a period of significant transformation and growth across all divisions...
+  Chunk 4 (657 chars): ## Section 2: Medical Research Division  This year saw significant strides in our understanding of XDR-47, a novel patho...
+  Chunk 5 (741 chars): ## Section 3: Software Engineering Division  The software engineering division dedicated significant effort to studying ...
+  Chunk 6 (613 chars): ## Section 4: Financial Analysis  Revenue breakdown by segment: Cloud Services ($1.8B, +31%), Enterprise Licenses ($1.2B...
+  Chunk 7 (751 chars): ## Section 5: Cybersecurity Analysis  The cybersecurity team responded to 12 significant security incidents this year, i...
+
+======================================================================
+  QUERY 1: What did the software engineering team accomplish this year?
+  Type: Semantic-heavy: needs understanding of 'accomplish' → project work
+  Expected section: Software Engineering
+======================================================================
+
+  SEMANTIC (VectorIndex — cosine similarity)
+  Accuracy: HIT  |  Time: 0.0006s
+
+    Result 1 [cosine distance: 0.4813]:
+      ## Section 3: Software Engineering Division  The software engineering division dedicated significant effort to studying various infection vectors in our distributed systems — specifically focusing on ...
+
+    Result 2 [cosine distance: 0.5929]:
+      ## Section 5: Cybersecurity Analysis  The cybersecurity team responded to 12 significant security incidents this year, including the notable incident INC-2023-Q4-011 which involved a sophisticated sup...
+
+    Result 3 [cosine distance: 0.6364]:
+      ## Table of Contents  1. Executive Summary 2. Medical Research Division 3. Software Engineering Division 4. Financial Analysis 5. Cybersecurity Analysis  ---...
+
+
+  LEXICAL (BM25Index — keyword matching)
+  Accuracy: HIT  |  Time: 0.0001s
+
+    Result 1 [cosine distance: 0.3007]:
+      ## Table of Contents  1. Executive Summary 2. Medical Research Division 3. Software Engineering Division 4. Financial Analysis 5. Cybersecurity Analysis  ---...
+
+    Result 2 [cosine distance: 0.6499]:
+      ## Section 3: Software Engineering Division  The software engineering division dedicated significant effort to studying various infection vectors in our distributed systems — specifically focusing on ...
+
+    Result 3 [cosine distance: 1.0000]:
+      # 2024 Annual Company Report...
+
+
+  HYBRID (Retriever — RRF fusion)
+  Accuracy: HIT  |  Time: 0.0009s
+
+    Result 1 [RRF score: 0.0325]:
+      ## Section 3: Software Engineering Division  The software engineering division dedicated significant effort to studying various infection vectors in our distributed systems — specifically focusing on ...
+
+    Result 2 [RRF score: 0.0323]:
+      ## Table of Contents  1. Executive Summary 2. Medical Research Division 3. Software Engineering Division 4. Financial Analysis 5. Cybersecurity Analysis  ---...
+
+    Result 3 [RRF score: 0.0315]:
+      ## Section 5: Cybersecurity Analysis  The cybersecurity team responded to 12 significant security incidents this year, including the notable incident INC-2023-Q4-011 which involved a sophisticated sup...
+
+
+  FINAL LLM ANSWER (generated from Hybrid results):
+    Based solely on the provided context (Section 3: Software Engineering Division), the software engineering team accomplished the following this year:
+
+1.  Studied infection vectors in distributed systems, focusing on failure propagation in microservice architectures.
+2.  Achieved Project Phoenix, reducing production incidents by 62% compared to last year.
+3.  Resolved 847 critical bugs.
+4.  Implemented automated canary deployments across all services.
+5.  Launched the new observability platform "Nightwatch," which processes 2.3 trillion events per day and has a mean time to detection of under 30 seconds.
+6.  Increased headcount to 3,200, with major hiring in platform reliability and site reliability engineering teams.
+
+======================================================================
+  QUERY 2: Find details about incident INC-2023-Q4-011
+  Type: Lexical-heavy: needs exact match on the incident ID
+  Expected section: Cybersecurity
+======================================================================
+
+  SEMANTIC (VectorIndex — cosine similarity)
+  Accuracy: HIT  |  Time: 0.0008s
+
+    Result 1 [cosine distance: 0.4900]:
+      ## Section 5: Cybersecurity Analysis  The cybersecurity team responded to 12 significant security incidents this year, including the notable incident INC-2023-Q4-011 which involved a sophisticated sup...
+
+    Result 2 [cosine distance: 0.6960]:
+      ## Section 3: Software Engineering Division  The software engineering division dedicated significant effort to studying various infection vectors in our distributed systems — specifically focusing on ...
+
+    Result 3 [cosine distance: 0.7255]:
+      # 2024 Annual Company Report...
+
+
+  LEXICAL (BM25Index — keyword matching)
+  Accuracy: HIT  |  Time: 0.0001s
+
+    Result 1 [cosine distance: 0.1298]:
+      ## Section 5: Cybersecurity Analysis  The cybersecurity team responded to 12 significant security incidents this year, including the notable incident INC-2023-Q4-011 which involved a sophisticated sup...
+
+    Result 2 [cosine distance: 1.0000]:
+      # 2024 Annual Company Report...
+
+    Result 3 [cosine distance: 1.0000]:
+      ## Table of Contents  1. Executive Summary 2. Medical Research Division 3. Software Engineering Division 4. Financial Analysis 5. Cybersecurity Analysis  ---...
+
+
+  HYBRID (Retriever — RRF fusion)
+  Accuracy: HIT  |  Time: 0.0009s
+
+    Result 1 [RRF score: 0.0328]:
+      ## Section 5: Cybersecurity Analysis  The cybersecurity team responded to 12 significant security incidents this year, including the notable incident INC-2023-Q4-011 which involved a sophisticated sup...
+
+    Result 2 [RRF score: 0.0320]:
+      # 2024 Annual Company Report...
+
+    Result 3 [RRF score: 0.0315]:
+      ## Table of Contents  1. Executive Summary 2. Medical Research Division 3. Software Engineering Division 4. Financial Analysis 5. Cybersecurity Analysis  ---...
+
+
+  FINAL LLM ANSWER (generated from Hybrid results):
+    Based solely on the provided context:
+
+Details about incident INC-2023-Q4-011:
+*   **Type:** Sophisticated supply chain attack.
+*   **Target:** Third-party dependency management system.
+*   **Detection Time:** Within 4 hours.
+*   **Containment Time:** Within 12 hours.
+*   **Detection Method:** Nightwatch platform's anomaly detection capabilities.
+*   **Root Cause:** Exploitation of a vulnerability in package version pinning (CVE-2024-1847).
+*   **Post-Incident Action:** Implementation of comprehensive supply chain verification controls, including signed artifact validation and automated dependency auditing.
+
+======================================================================
+  QUERY 3: What was the company revenue and how did it grow?
+  Type: General fact: should find financial section
+  Expected section: Financial
+======================================================================
+
+  SEMANTIC (VectorIndex — cosine similarity)
+  Accuracy: HIT  |  Time: 0.0006s
+
+    Result 1 [cosine distance: 0.5327]:
+      ## Section 1: Executive Summary  This year marked a period of significant transformation and growth across all divisions of the company. Our commitment to innovation, operational excellence, and strat...
+
+    Result 2 [cosine distance: 0.5701]:
+      ## Section 4: Financial Analysis  Revenue breakdown by segment: Cloud Services ($1.8B, +31%), Enterprise Licenses ($1.2B, +18%), Consulting ($700M, +12%), Research Grants ($500M, +45%). Operating marg...
+
+    Result 3 [cosine distance: 0.6917]:
+      ## Section 3: Software Engineering Division  The software engineering division dedicated significant effort to studying various infection vectors in our distributed systems — specifically focusing on ...
+
+
+  LEXICAL (BM25Index — keyword matching)
+  Accuracy: HIT  |  Time: 0.0001s
+
+    Result 1 [cosine distance: 0.6961]:
+      # 2024 Annual Company Report...
+
+    Result 2 [cosine distance: 1.0000]:
+      ## Table of Contents  1. Executive Summary 2. Medical Research Division 3. Software Engineering Division 4. Financial Analysis 5. Cybersecurity Analysis  ---...
+
+    Result 3 [cosine distance: 1.0000]:
+      ## Section 4: Financial Analysis  Revenue breakdown by segment: Cloud Services ($1.8B, +31%), Enterprise Licenses ($1.2B, +18%), Consulting ($700M, +12%), Research Grants ($500M, +45%). Operating marg...
+
+
+  HYBRID (Retriever — RRF fusion)
+  Accuracy: HIT  |  Time: 0.0009s
+
+    Result 1 [RRF score: 0.0320]:
+      ## Section 4: Financial Analysis  Revenue breakdown by segment: Cloud Services ($1.8B, +31%), Enterprise Licenses ($1.2B, +18%), Consulting ($700M, +12%), Research Grants ($500M, +45%). Operating marg...
+
+    Result 2 [RRF score: 0.0318]:
+      ## Table of Contents  1. Executive Summary 2. Medical Research Division 3. Software Engineering Division 4. Financial Analysis 5. Cybersecurity Analysis  ---...
+
+    Result 3 [RRF score: 0.0315]:
+      ## Section 1: Executive Summary  This year marked a period of significant transformation and growth across all divisions of the company. Our commitment to innovation, operational excellence, and strat...
+
+
+  FINAL LLM ANSWER (generated from Hybrid results):
+    The company's total revenue reached $4.2 billion, growing by 23% year-over-year.  
+
+This information is from **Section 1: Executive Summary** in the provided context.
+
+======================================================================
+  SUMMARY — WHICH STRATEGY IS BEST?
+======================================================================
+
+  | # | Query                                | Semantic | BM25 | Hybrid |
+  |---|--------------------------------------|----------|------|--------|
+  | 1 | What did the software engineering te | HIT      | HIT  | HIT    |
+  | 2 | Find details about incident INC-2023 | HIT      | HIT  | HIT    |
+  | 3 | What was the company revenue and how | HIT      | HIT  | HIT    |
+
+  CONCLUSION:
+
+  Semantic search excels at understanding INTENT:
+    'What did the team accomplish?' -> finds project work sections
+    Even though 'accomplish' never appears in the document.
+
+  BM25 excels at EXACT TERM matching:
+    'INC-2023-Q4-011' -> finds the exact section with that ID
+    Semantic search might miss this because the ID is opaque.
+
+  Hybrid (RRF) gets the BEST of both:
+    Documents that rank well in BOTH indexes get boosted.
+    This is the standard approach in production RAG systems.
+
+  WHY HYBRID IS BETTER (mathematically):
+    RRF_score = sum( 1/(k + rank_i) ) for each index i
+    A doc at rank 1 in BOTH indexes:  1/61 + 1/61 = 0.0328
+    A doc at rank 1 in ONE index:      1/61 + 1/62 = 0.0322
+    Consistently relevant docs always win over one-hit wonders.
