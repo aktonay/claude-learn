@@ -1,0 +1,371 @@
+======================================================================
+  PROMPT ENGINEERING TECHNIQUES - EVALUATION REPORT
+  Date: 2026-05-12_15-43-34
+  Model: glm-4.5
+  Test cases: 3
+======================================================================
+
+======================================================================
+  SCORE PROGRESSION
+======================================================================
+
+  Step 1 [Be Clear and Direct      ] 2.7/10
+  Step 2 [Be Specific              ] 2.3/10 (-0.3 vs previous)
+  Step 3 [Use XML Tags             ] 2.3/10 (0.0 vs previous)
+  Step 4 [Provide Examples         ] 3.7/10 (+1.3 vs previous)
+
+======================================================================
+  TECHNIQUES EXPLAINED
+======================================================================
+
+  Step 1: Be Clear and Direct
+    What changed: A naive prompt with no guidance. Just asks the question.
+    Why it helps: No guidelines, no structure, no examples. The model guesses what you want.
+
+  Step 2: Be Specific
+    What changed: Add output quality guidelines and process steps.
+    Why it helps: Explicit instructions: calorie count, macro breakdown, meal timing, portion sizes in grams.
+
+  Step 3: Use XML Tags
+    What changed: Structure content with clear boundaries using XML tags.
+    Why it helps: Wrap athlete data in <athlete_information> tags. Model can distinguish instructions from data.
+
+  Step 4: Provide Examples
+    What changed: Add a sample input/output pair to demonstrate ideal output.
+    Why it helps: Shows model exactly what 'good' looks like. Calibrates format, tone, detail level.
+
+======================================================================
+  STEP 1: BE CLEAR AND DIRECT
+  Average Score: 2.7/10
+======================================================================
+
+  Technique applied: Naive baseline. Just asks 'What should this person eat?' with no guidance on format, structure, or detail level.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a powerlifter aiming for weight maintenance wit
+----------------------------------------------------------------------
+
+  height: 175 cm
+  weight: 90 kg
+  goal: weight maintenance
+  restrictions: dairy allergy
+
+  Criteria: Total daily calories between 2900-3300 kcal for weight maintenance, All meals completely free of dairy-derived ingredients (e.g., milk, cheese, yogurt, butter), Meal plan includes exactly three distinct meals: breakfast, lunch, and dinner, Protein portion per meal ≥30g to support powerlifting training demands
+
+  Score: 3/10
+  Reasoning: The solution fails to meet all mandatory requirements: no daily caloric total provided, no complete macronutrient breakdown, and no concrete meal plan with exact foods, portions, and timing. It only provides general nutritional guidance rather than the requested compact 1-day meal plan. Additionally, it doesn't meet the secondary criteria: the calorie range is below 2900-3300 kcal, no three distinct meals are provided, and protein portions per meal are not specified. While the solution appropriately acknowledges the dairy allergy and provides relevant nutritional information, it completely fails to deliver the requested meal plan format.
+  Strengths: Acknowledges dairy allergy appropriately, Provides general nutritional guidance for athletes, Explains variability in calorie needs based on activity level
+  Weaknesses: Fails to provide a concrete meal plan as requested, Does not include daily caloric total, Missing complete macronutrient breakdown, No specific meals with exact foods, portions, and timing, Calorie range (2200-2800) below required range (2900-3300), Does not include exactly three distinct meals, No protein portions specified per meal
+
+  Output:
+    Based on the provided information (Height: 175 cm, Weight: 90 kg, Goal: Weight Maintenance, Dietary Restrictions: Dairy Allergy), here's a comprehensive guide on what this person should eat:
+    
+    **Key Considerations:**
+    
+    1.  **Calorie Needs (Maintenance):** At 90kg (198 lbs) and 175cm (5'9"), the estimated daily calorie requirement for weight maintenance is approximately **2200 - 2800 calories**. This range varies significantly based on:
+        *   **Age:** Younger individuals burn more calories.
+        *   **Sex:** Males generally need more calories than females.
+        *   **Activity Level:** This is the MOST critical factor.
+            *   **Sedentary** (little/no exercise): ~2200-2400 kcal
+            *   **Moderately Active** (3-5 days/week moderate exercise): ~2400-2700 kcal
+            *   **Very Active** (6-7 days/week intense exercise): ~2700-3000+ kcal
+        *   **Action:** Start with an estimate within this range and adjust based on weight trends over 2-4 weeks. If weight stays stable, calories are correct. If gaining, reduce slightly. If losing, increase slightly. Use an online TDEE calculator for a personalized estimate.
+    
+    2.  **Dairy Allergy:** This requires **complete avoidance** of all dairy products and strict attention to labels for hidden dairy (casein, whey, lactose, milk solids, butterfat, etc.). Focus on naturally dairy-free whole foods and fortified alternatives.
+    
+    ... (14 more lines)
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a swimmer requiring high-calorie fuel during of
+----------------------------------------------------------------------
+
+  height: 185 cm
+  weight: 82 kg
+  goal: maintain weight with high-calorie fuel
+  restrictions: vegetarian
+
+  Criteria: includes 3 meals and 2 snacks, exclusively vegetarian ingredients, calorie-dense foods emphasized, total output under 100 words
+
+  Score: 2/10
+  Reasoning: The solution fails to meet all three mandatory requirements: no specific daily caloric total, no complete macronutrient breakdown, and no specific meal plans with exact foods, portions, and timing. It also fails two of the four secondary criteria: output is much longer than 100 words, and it doesn't actually include 3 meals and 2 snacks as required (only mentions that the person should eat this frequency). According to the instructions, any violation of mandatory requirements must result in a score of 3 or lower.
+  Strengths: Emphasizes calorie-dense foods appropriate for athletes, Focuses on vegetarian options, Mentions important nutrients vegetarians need to monitor
+  Weaknesses: No specific daily caloric total provided, No complete macronutrient breakdown, No specific meal plans with exact foods, portions, and timing, Output much longer than 100 words, Doesn't actually include 3 meals and 2 snacks as required
+
+  Output:
+    Based on the provided information (Height: 185 cm, Weight: 82 kg, Goal: Maintain weight with high-calorie fuel, Dietary restrictions: Vegetarian), here's a comprehensive guide to what this person should eat:
+    
+    ### Key Considerations:
+    1.  **Maintenance Calories:** At 185 cm and 82 kg, estimated maintenance calories are roughly **2,800 - 3,200+ kcal/day** (assuming moderate activity). "High-calorie fuel" suggests targeting the **higher end (3,000 - 3,500+ kcal)**.
+    2.  **Vegetarian Focus:** Prioritize calorie-dense plant-based foods, plus dairy/eggs if lacto-ovo vegetarian.
+    3.  **Macronutrient Balance:** Ensure adequate protein (1.6-2.2g/kg body weight) and healthy fats for satiety and health.
+    4.  **Nutrient Density:** Pay attention to nutrients vegetarians often need more of: **Iron, Vitamin B12, Calcium, Zinc, Omega-3s (ALA), Vitamin D, Iodine.**
+    
+    ### Core Dietary Principles:
+    1.  **Embrace Calorie Density:** Choose foods rich in healthy fats and complex carbs.
+    2.  **Prioritize Protein:** Include a protein source at every meal/snack.
+    3.  **Eat Frequently:** 3 main meals + 2-3 substantial snacks help meet calorie goals.
+    4.  **Cook with Healthy Fats:** Use oils (olive, avocado, coconut) liberally.
+    5.  **Hydrate Smart:** Drink calorie-containing fluids (milk, smoothies, juice) alongside water.
+    
+    ... (6 more lines)
+
+----------------------------------------------------------------------
+  Test Case 3: Testing with a basketball player needing hydration-focused m
+----------------------------------------------------------------------
+
+  height: 6'5"
+  weight: 210 lbs
+  goal: Hydration-focused competition prep
+  restrictions: Gluten intolerance
+
+  Criteria: Includes three distinct gluten-free meals (breakfast, lunch, dinner), Each meal incorporates at least one hydration-focused component, Plan is concise and fits within 400 tokens
+
+  Score: 3/10
+  Reasoning: The solution completely fails to meet the mandatory requirement of providing a meal plan with exact foods, portions, and timing. While it provides nutritional targets and strategy, it doesn't include any actual meals for breakfast, lunch, or dinner. It also fails to meet any of the secondary criteria since no meals are provided at all. The solution appears to be a general nutritional strategy rather than a specific meal plan as requested in the task description.
+  Strengths: Provides caloric target of ~2,500-2,800 kcal, Includes macronutrient breakdown with specific protein and carbohydrate targets, Addresses gluten intolerance restriction
+  Weaknesses: Does not provide any specific meal plan with foods, portions, and timing as required, Contains incomplete information (cuts off mid-sentence), Fails to include any hydration-focused meals or components
+
+  Output:
+    Based on your stats (6'5", 210 lbs), goal (hydration-focused competition prep), and dietary restriction (gluten intolerance), here's a comprehensive nutritional strategy designed to maximize muscle fullness while minimizing subcutaneous water retention, all while avoiding gluten.
+    
+    **Core Principles:**
+    
+    1.  **Hydration is Key:** Start **high** (1.5-2+ gallons/day) well before peak week and manipulate strategically later.
+    2.  **Electrolyte Balance:** Critical alongside water. Focus on Sodium (Na), Potassium (K), Magnesium (Mg), and Calcium (Ca).
+    3.  **Gluten-Free Foundation:** All recommendations are inherently gluten-free or require certified GF options.
+    4.  **Phased Approach:** Prep is divided into distinct phases: Loading, Depletion, Peak Week, Post-Comp.
+    5.  **Lean Protein:** Essential for muscle preservation during deficit and for glycogen storage.
+    6.  **Strategic Carbs:** Fuel training and load glycogen, but source and timing change per phase.
+    7.  **Healthy Fats:** Moderate, focusing on anti-inflammatory sources.
+    
+    **Phase 1: Loading Phase (4-8 Weeks Out - Foundation Building)**
+    
+    *   **Calories:** Slight deficit (approx. 250-500 kcal below maintenance). Maintenance estimate for your stats: ~2,900-3,200 kcal. Target: **~2,500-2,800 kcal**.
+    ... (3 more lines)
+
+======================================================================
+  STEP 2: BE SPECIFIC
+  Average Score: 2.3/10
+======================================================================
+
+  Technique applied: Adds explicit guidelines: calorie count, macro breakdown, meal timing, portion sizes in grams, budget-friendly.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a powerlifter aiming for weight maintenance wit
+----------------------------------------------------------------------
+
+  height: 175 cm
+  weight: 90 kg
+  goal: weight maintenance
+  restrictions: dairy allergy
+
+  Criteria: Total daily calories between 2900-3300 kcal for weight maintenance, All meals completely free of dairy-derived ingredients (e.g., milk, cheese, yogurt, butter), Meal plan includes exactly three distinct meals: breakfast, lunch, and dinner, Protein portion per meal ≥30g to support powerlifting training demands
+
+  Score: 5/10
+  Reasoning: Fallback: grader returned non-JSON output
+  Strengths: N/A
+  Weaknesses: Grader output could not be parsed
+
+  Output:
+    Here’s a dairy-free, budget-friendly one-day meal plan for a 90kg athlete focused on weight maintenance, designed to provide **~2,950 calories**, **170g protein**, **350g carbs**, and **85g fat**. All portions are in grams, meals are timed for optimal energy, and foods avoid dairy while prioritizing affordability.
+    
+    ---
+    
+    ### **Daily Totals**
+    - **Calories:** 2,950 kcal  
+    - **Protein:** 170g (23%)  
+    - **Carbs:** 350g (47%)  
+    - **Fat:** 85g (26%)  
+    
+    ---
+    
+    ### **Meal Plan**
+    **1. Breakfast (7:00 AM)**  
+    - **Meal:** Oatmeal with Protein & Berries  
+    ... (12 more lines)
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a swimmer requiring high-calorie fuel during of
+----------------------------------------------------------------------
+
+  height: 185 cm
+  weight: 82 kg
+  goal: maintain weight with high-calorie fuel
+  restrictions: vegetarian
+
+  Criteria: includes 3 meals and 2 snacks, exclusively vegetarian ingredients, calorie-dense foods emphasized, total output under 100 words
+
+  Score: 1/10
+  Reasoning: The solution is entirely blank and fails to provide any content that would meet the task requirements or mandatory criteria.
+  Strengths: 
+  Weaknesses: Solution is completely empty, Missing daily caloric total, Missing macronutrient breakdown, Missing meals with exact foods, portions, and timing
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 3: Testing with a basketball player needing hydration-focused m
+----------------------------------------------------------------------
+
+  height: 6'5"
+  weight: 210 lbs
+  goal: Hydration-focused competition prep
+  restrictions: Gluten intolerance
+
+  Criteria: Includes three distinct gluten-free meals (breakfast, lunch, dinner), Each meal incorporates at least one hydration-focused component, Plan is concise and fits within 400 tokens
+
+  Score: 1/10
+  Reasoning: The solution is completely empty and fails to provide any mandatory requirements (caloric total, macronutrient breakdown, or detailed meals). This violates the automatic failure condition for missing mandatory elements.
+  Strengths: 
+  Weaknesses: Missing daily caloric total, Missing macronutrient breakdown, Missing meals with exact foods, portions, and timing
+
+  Output:
+    
+
+======================================================================
+  STEP 3: USE XML TAGS
+  Average Score: 2.3/10
+======================================================================
+
+  Technique applied: Wraps athlete data in <athlete_information> XML tags for clear boundaries between instructions and data.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a powerlifter aiming for weight maintenance wit
+----------------------------------------------------------------------
+
+  height: 175 cm
+  weight: 90 kg
+  goal: weight maintenance
+  restrictions: dairy allergy
+
+  Criteria: Total daily calories between 2900-3300 kcal for weight maintenance, All meals completely free of dairy-derived ingredients (e.g., milk, cheese, yogurt, butter), Meal plan includes exactly three distinct meals: breakfast, lunch, and dinner, Protein portion per meal ≥30g to support powerlifting training demands
+
+  Score: 1/10
+  Reasoning: The solution is completely empty and fails to meet all mandatory requirements. It provides no daily caloric total, macronutrient breakdown, or meal details (foods, portions, timing). Without any meals, it cannot satisfy the dairy-free restriction, 30g protein/meal requirement, or 2900-3300 kcal target.
+  Strengths: 
+  Weaknesses: No daily caloric total provided, No macronutrient breakdown provided, No meals with exact foods, portions, or timing provided, Missing breakfast meal, Missing lunch meal, Missing dinner meal, Protein portions not verified (no meals to assess), Dairy-free status not verifiable (no ingredients listed)
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a swimmer requiring high-calorie fuel during of
+----------------------------------------------------------------------
+
+  height: 185 cm
+  weight: 82 kg
+  goal: maintain weight with high-calorie fuel
+  restrictions: vegetarian
+
+  Criteria: includes 3 meals and 2 snacks, exclusively vegetarian ingredients, calorie-dense foods emphasized, total output under 100 words
+
+  Score: 5/10
+  Reasoning: Fallback: grader returned non-JSON output
+  Strengths: N/A
+  Weaknesses: Grader output could not be parsed
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 3: Testing with a basketball player needing hydration-focused m
+----------------------------------------------------------------------
+
+  height: 6'5"
+  weight: 210 lbs
+  goal: Hydration-focused competition prep
+  restrictions: Gluten intolerance
+
+  Criteria: Includes three distinct gluten-free meals (breakfast, lunch, dinner), Each meal incorporates at least one hydration-focused component, Plan is concise and fits within 400 tokens
+
+  Score: 1/10
+  Reasoning: The solution is completely empty and fails to meet every aspect of the task. It provides no meals, nutritional information, or hydration elements as required. The absence of any content means it violates all mandatory requirements and criteria.
+  Strengths: 
+  Weaknesses: Missing all mandatory requirements (daily caloric total, macronutrient breakdown, meals with exact foods/portions/timing), No hydration-focused components included, Does not address gluten-free restriction, Zero meals provided
+
+  Output:
+    
+
+======================================================================
+  STEP 4: PROVIDE EXAMPLES
+  Average Score: 3.7/10
+======================================================================
+
+  Technique applied: Adds a complete sample input/output pair showing the exact format, detail level, and structure expected.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a powerlifter aiming for weight maintenance wit
+----------------------------------------------------------------------
+
+  height: 175 cm
+  weight: 90 kg
+  goal: weight maintenance
+  restrictions: dairy allergy
+
+  Criteria: Total daily calories between 2900-3300 kcal for weight maintenance, All meals completely free of dairy-derived ingredients (e.g., milk, cheese, yogurt, butter), Meal plan includes exactly three distinct meals: breakfast, lunch, and dinner, Protein portion per meal ≥30g to support powerlifting training demands
+
+  Score: 5/10
+  Reasoning: Fallback: grader returned non-JSON output
+  Strengths: N/A
+  Weaknesses: Grader output could not be parsed
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a swimmer requiring high-calorie fuel during of
+----------------------------------------------------------------------
+
+  height: 185 cm
+  weight: 82 kg
+  goal: maintain weight with high-calorie fuel
+  restrictions: vegetarian
+
+  Criteria: includes 3 meals and 2 snacks, exclusively vegetarian ingredients, calorie-dense foods emphasized, total output under 100 words
+
+  Score: 5/10
+  Reasoning: Fallback: grader returned non-JSON output
+  Strengths: N/A
+  Weaknesses: Grader output could not be parsed
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 3: Testing with a basketball player needing hydration-focused m
+----------------------------------------------------------------------
+
+  height: 6'5"
+  weight: 210 lbs
+  goal: Hydration-focused competition prep
+  restrictions: Gluten intolerance
+
+  Criteria: Includes three distinct gluten-free meals (breakfast, lunch, dinner), Each meal incorporates at least one hydration-focused component, Plan is concise and fits within 400 tokens
+
+  Score: 1/10
+  Reasoning: The solution is completely empty and fails to meet all mandatory requirements. There is no meal plan, nutritional information, or hydration-focused components as requested in the task.
+  Strengths: 
+  Weaknesses: No meal plan provided, Missing daily caloric total, Missing macronutrient breakdown, Missing meals with exact foods, portions, and timing
+
+  Output:
+    
+
+======================================================================
+  KEY TAKEAWAYS
+======================================================================
+
+  1. BE CLEAR AND DIRECT: Start with a simple, clear ask.
+     This is your baseline. Low scores are expected.
+
+  2. BE SPECIFIC: Add guidelines for format, content, and detail level.
+     This typically produces the LARGEST score improvement.
+
+  3. USE XML TAGS: Structure your prompt with clear boundaries.
+     Impact grows with prompt complexity and data volume.
+
+  4. PROVIDE EXAMPLES: Show, don't tell.
+     One good example calibrates format, tone, and detail better
+     than paragraphs of instructions.
+
+  The evaluation pipeline makes each technique's contribution
+  measurable. You see EXACTLY how much each step improved scores.

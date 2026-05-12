@@ -1,0 +1,311 @@
+======================================================================
+  PROMPT ENGINEERING TECHNIQUES - EVALUATION REPORT
+  Date: 2026-05-12_16-12-06
+  Model: glm-5
+  Test cases: 3
+======================================================================
+
+======================================================================
+  SCORE PROGRESSION
+======================================================================
+
+  Step 1 [Be Clear and Direct      ] 1.0/10
+  Step 2 [Be Specific              ] 2.3/10 (+1.3 vs previous)
+  Step 3 [Use XML Tags             ] 2.3/10 (0.0 vs previous)
+  Step 4 [Provide Examples         ] 1.0/10 (-1.3 vs previous)
+
+======================================================================
+  TECHNIQUES EXPLAINED
+======================================================================
+
+  Step 1: Be Clear and Direct
+    What changed: A naive prompt with no guidance. Just asks the question.
+    Why it helps: No guidelines, no structure, no examples. The model guesses what you want.
+
+  Step 2: Be Specific
+    What changed: Add output quality guidelines and process steps.
+    Why it helps: Explicit instructions: calorie count, macro breakdown, meal timing, portion sizes in grams.
+
+  Step 3: Use XML Tags
+    What changed: Structure content with clear boundaries using XML tags.
+    Why it helps: Wrap athlete data in <athlete_information> tags. Model can distinguish instructions from data.
+
+  Step 4: Provide Examples
+    What changed: Add a sample input/output pair to demonstrate ideal output.
+    Why it helps: Shows model exactly what 'good' looks like. Calibrates format, tone, detail level.
+
+======================================================================
+  STEP 1: BE CLEAR AND DIRECT
+  Average Score: 1.0/10
+======================================================================
+
+  Technique applied: Naive baseline. Just asks 'What should this person eat?' with no guidance on format, structure, or detail level.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a competitive swimmer who needs high-carb meals
+----------------------------------------------------------------------
+
+  height: 6 feet 2 inches
+  weight: 185 lbs
+  goal: High-carbohydrate meal plan to fuel competitive swimming
+  restrictions: Celiac disease, must be strictly gluten-free
+
+  Criteria: Includes exactly three main meals and at least two snacks., Every food item and ingredient listed is strictly gluten-free to accommodate celiac disease., Meals are heavily focused on high-carbohydrate macro profiles suitable for an endurance swimmer., Formatted compactly and easily readable within a 400-token limit.
+
+  Score: 1/10
+  Reasoning: The solution is entirely empty, failing every mandatory requirement. There is no meal plan, no caloric total, no macronutrient breakdown, and no foods listed. This is an automatic failure as it violates all mandatory requirements listed in the evaluation criteria.
+  Strengths: 
+  Weaknesses: Solution is completely empty - no content provided, Missing daily caloric total, Missing macronutrient breakdown, Missing all meals with exact foods, portions, and timing, No meals or snacks included, Cannot verify gluten-free compliance, Cannot verify high-carbohydrate focus
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a lightweight rower trying to maintain weight c
+----------------------------------------------------------------------
+
+  height: 5'9"
+  weight: 160 lbs
+  goal: Maintain weight class while fueling intense training
+  restrictions: Vegan
+
+  Criteria: Includes exactly three main meals and at least one snack., Contains exclusively vegan ingredients, explicitly avoiding all meat, dairy, eggs, and honey., Provides a high-carbohydrate and moderate-protein profile to fuel intense training while maintaining current weight.
+
+  Score: 1/10
+  Reasoning: The solution section is empty. There is no meal plan to evaluate. This fails all mandatory requirements as it contains no caloric total, no macronutrient breakdown, and no meals with foods, portions, or timing. Since the mandatory requirements are completely absent, this receives the lowest possible score.
+  Strengths: 
+  Weaknesses: Solution is completely empty, No meals provided, No caloric total, No macronutrient breakdown, No foods, portions, or timing information
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 3: Testing with a gymnast focused on lean muscle maintenance wi
+----------------------------------------------------------------------
+
+  height: 5'4"
+  weight: 130 lbs
+  goal: lean muscle maintenance
+  restrictions: nut-free, dairy-free
+
+  Criteria: Includes exactly one full day of meals (breakfast, lunch, dinner, and at least one snack)., Explicitly excludes all nuts, tree nuts, and dairy products from all ingredients., Incorporates a high-protein component in every main meal to support the lean muscle maintenance goal., Remains compact and concise, presenting the entire plan in under 300 words.
+
+  Score: 1/10
+  Reasoning: The provided solution is blank and contains absolutely no text. As a result, it fails to meet every single mandatory requirement and secondary criterion, resulting in the lowest possible score.
+  Strengths: 
+  Weaknesses: The solution is completely empty., Fails to include a daily caloric total., Fails to include a macronutrient breakdown., Fails to include meals with exact foods, portions, and timing., Fails to exclude nuts and dairy (as no ingredients were provided)., Fails to incorporate high-protein components.
+
+  Output:
+    
+
+======================================================================
+  STEP 2: BE SPECIFIC
+  Average Score: 2.3/10
+======================================================================
+
+  Technique applied: Adds explicit guidelines: calorie count, macro breakdown, meal timing, portion sizes in grams, budget-friendly.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a competitive swimmer who needs high-carb meals
+----------------------------------------------------------------------
+
+  height: 6 feet 2 inches
+  weight: 185 lbs
+  goal: High-carbohydrate meal plan to fuel competitive swimming
+  restrictions: Celiac disease, must be strictly gluten-free
+
+  Criteria: Includes exactly three main meals and at least two snacks., Every food item and ingredient listed is strictly gluten-free to accommodate celiac disease., Meals are heavily focused on high-carbohydrate macro profiles suitable for an endurance swimmer., Formatted compactly and easily readable within a 400-token limit.
+
+  Score: 1/10
+  Reasoning: The solution is entirely blank with no meal plan content whatsoever. It fails every single mandatory requirement: no daily caloric total, no macronutrient breakdown, and no meals with exact foods, portions, or timing. This is a complete failure to address the task.
+  Strengths: 
+  Weaknesses: Solution is completely empty - no content provided, Missing daily caloric total, Missing macronutrient breakdown, Missing meals with exact foods, portions, and timing, Missing three main meals and at least two snacks, No gluten-free foods listed, No high-carbohydrate focus demonstrated
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a lightweight rower trying to maintain weight c
+----------------------------------------------------------------------
+
+  height: 5'9"
+  weight: 160 lbs
+  goal: Maintain weight class while fueling intense training
+  restrictions: Vegan
+
+  Criteria: Includes exactly three main meals and at least one snack., Contains exclusively vegan ingredients, explicitly avoiding all meat, dairy, eggs, and honey., Provides a high-carbohydrate and moderate-protein profile to fuel intense training while maintaining current weight.
+
+  Score: 5/10
+  Reasoning: Fallback: grader returned non-JSON output
+  Strengths: N/A
+  Weaknesses: Grader output could not be parsed
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 3: Testing with a gymnast focused on lean muscle maintenance wi
+----------------------------------------------------------------------
+
+  height: 5'4"
+  weight: 130 lbs
+  goal: lean muscle maintenance
+  restrictions: nut-free, dairy-free
+
+  Criteria: Includes exactly one full day of meals (breakfast, lunch, dinner, and at least one snack)., Explicitly excludes all nuts, tree nuts, and dairy products from all ingredients., Incorporates a high-protein component in every main meal to support the lean muscle maintenance goal., Remains compact and concise, presenting the entire plan in under 300 words.
+
+  Score: 1/10
+  Reasoning: The provided solution is entirely blank. As a result, it automatically fails all mandatory requirements (missing caloric total, macronutrient breakdown, and meals with exact foods, portions, and timing), warranting a score of 1.
+  Strengths: 
+  Weaknesses: The solution is completely empty., Fails to provide any meals, portions, or timing., Fails to include daily caloric total and macronutrient breakdown., Fails to meet any of the specified criteria.
+
+  Output:
+    
+
+======================================================================
+  STEP 3: USE XML TAGS
+  Average Score: 2.3/10
+======================================================================
+
+  Technique applied: Wraps athlete data in <athlete_information> XML tags for clear boundaries between instructions and data.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a competitive swimmer who needs high-carb meals
+----------------------------------------------------------------------
+
+  height: 6 feet 2 inches
+  weight: 185 lbs
+  goal: High-carbohydrate meal plan to fuel competitive swimming
+  restrictions: Celiac disease, must be strictly gluten-free
+
+  Criteria: Includes exactly three main meals and at least two snacks., Every food item and ingredient listed is strictly gluten-free to accommodate celiac disease., Meals are heavily focused on high-carbohydrate macro profiles suitable for an endurance swimmer., Formatted compactly and easily readable within a 400-token limit.
+
+  Score: 1/10
+  Reasoning: The solution is entirely blank. It fails to meet any of the mandatory requirements: no daily caloric total, no macronutrient breakdown, and no meals with exact foods, portions, or timing. Since the mandatory requirements are completely absent, this is an automatic failure.
+  Strengths: 
+  Weaknesses: Solution is completely empty - no content provided, Missing daily caloric total, Missing macronutrient breakdown, Missing meals with exact foods, portions, and timing, No three main meals or two snacks provided, No gluten-free foods listed, No high-carbohydrate meal plan provided, No formatting present
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a lightweight rower trying to maintain weight c
+----------------------------------------------------------------------
+
+  height: 5'9"
+  weight: 160 lbs
+  goal: Maintain weight class while fueling intense training
+  restrictions: Vegan
+
+  Criteria: Includes exactly three main meals and at least one snack., Contains exclusively vegan ingredients, explicitly avoiding all meat, dairy, eggs, and honey., Provides a high-carbohydrate and moderate-protein profile to fuel intense training while maintaining current weight.
+
+  Score: 5/10
+  Reasoning: Fallback: grader returned non-JSON output
+  Strengths: N/A
+  Weaknesses: Grader output could not be parsed
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 3: Testing with a gymnast focused on lean muscle maintenance wi
+----------------------------------------------------------------------
+
+  height: 5'4"
+  weight: 130 lbs
+  goal: lean muscle maintenance
+  restrictions: nut-free, dairy-free
+
+  Criteria: Includes exactly one full day of meals (breakfast, lunch, dinner, and at least one snack)., Explicitly excludes all nuts, tree nuts, and dairy products from all ingredients., Incorporates a high-protein component in every main meal to support the lean muscle maintenance goal., Remains compact and concise, presenting the entire plan in under 300 words.
+
+  Score: 1/10
+  Reasoning: The solution is entirely empty. It fails to meet any of the mandatory requirements (no caloric total, no macronutrient breakdown, no meals with exact foods/portions/timing) and fails all secondary criteria (no meals provided at all, cannot verify dietary restrictions, no protein components mentioned, not a complete meal plan). This is a complete failure to address the task.
+  Strengths: 
+  Weaknesses: Solution is completely empty - no content provided, Missing daily caloric total, Missing macronutrient breakdown, Missing any meal plans with foods, portions, or timing, Fails all mandatory requirements
+
+  Output:
+    
+
+======================================================================
+  STEP 4: PROVIDE EXAMPLES
+  Average Score: 1.0/10
+======================================================================
+
+  Technique applied: Adds a complete sample input/output pair showing the exact format, detail level, and structure expected.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a competitive swimmer who needs high-carb meals
+----------------------------------------------------------------------
+
+  height: 6 feet 2 inches
+  weight: 185 lbs
+  goal: High-carbohydrate meal plan to fuel competitive swimming
+  restrictions: Celiac disease, must be strictly gluten-free
+
+  Criteria: Includes exactly three main meals and at least two snacks., Every food item and ingredient listed is strictly gluten-free to accommodate celiac disease., Meals are heavily focused on high-carbohydrate macro profiles suitable for an endurance swimmer., Formatted compactly and easily readable within a 400-token limit.
+
+  Score: 1/10
+  Reasoning: The solution is entirely blank. It fails all mandatory requirements (no caloric total, no macronutrient breakdown, no meals with exact foods/ports/timing) and all secondary criteria (no three main meals, no two snacks, no gluten-free foods listed, no high-carbohydrate focus, no formatting at all). This is a complete failure to address the task.
+  Strengths: 
+  Weaknesses: The solution is completely empty - no content was provided whatsoever, No meals, snacks, or food items are listed, No daily caloric total provided, No macronutrient breakdown provided, No portion sizes or timing information, Fails every single mandatory and secondary criterion
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a lightweight rower trying to maintain weight c
+----------------------------------------------------------------------
+
+  height: 5'9"
+  weight: 160 lbs
+  goal: Maintain weight class while fueling intense training
+  restrictions: Vegan
+
+  Criteria: Includes exactly three main meals and at least one snack., Contains exclusively vegan ingredients, explicitly avoiding all meat, dairy, eggs, and honey., Provides a high-carbohydrate and moderate-protein profile to fuel intense training while maintaining current weight.
+
+  Score: 1/10
+  Reasoning: The solution is completely empty and fails to meet any of the mandatory requirements or criteria. It provides no meal plan, nutritional information, or any content at all.
+  Strengths: 
+  Weaknesses: Solution is completely empty, Fails to include daily caloric total, Fails to include macronutrient breakdown, Fails to include meals with exact foods, portions, and timing, Fails to include three main meals and at least one snack, Fails to provide vegan ingredients, Fails to provide appropriate nutritional profile for an athlete
+
+  Output:
+    
+
+----------------------------------------------------------------------
+  Test Case 3: Testing with a gymnast focused on lean muscle maintenance wi
+----------------------------------------------------------------------
+
+  height: 5'4"
+  weight: 130 lbs
+  goal: lean muscle maintenance
+  restrictions: nut-free, dairy-free
+
+  Criteria: Includes exactly one full day of meals (breakfast, lunch, dinner, and at least one snack)., Explicitly excludes all nuts, tree nuts, and dairy products from all ingredients., Incorporates a high-protein component in every main meal to support the lean muscle maintenance goal., Remains compact and concise, presenting the entire plan in under 300 words.
+
+  Score: 1/10
+  Reasoning: The provided solution is entirely blank, failing to generate any content. It fails every single mandatory and secondary criterion specified in the evaluation rubric. Because it misses all mandatory requirements (calories, macros, exact meals/ports/timing), it automatically receives a failing score.
+  Strengths: 
+  Weaknesses: The solution is completely empty., Fails to provide a daily caloric total., Fails to provide a macronutrient breakdown., Fails to provide meals with exact foods, portions, and timing., Does not include breakfast, lunch, dinner, and a snack., Does not explicitly exclude nuts and dairy (as there are no ingredients listed)., Does not incorporate high-protein components., Does not remain compact and concise under 300 words (0 words).
+
+  Output:
+    
+
+======================================================================
+  KEY TAKEAWAYS
+======================================================================
+
+  1. BE CLEAR AND DIRECT: Start with a simple, clear ask.
+     This is your baseline. Low scores are expected.
+
+  2. BE SPECIFIC: Add guidelines for format, content, and detail level.
+     This typically produces the LARGEST score improvement.
+
+  3. USE XML TAGS: Structure your prompt with clear boundaries.
+     Impact grows with prompt complexity and data volume.
+
+  4. PROVIDE EXAMPLES: Show, don't tell.
+     One good example calibrates format, tone, and detail better
+     than paragraphs of instructions.
+
+  The evaluation pipeline makes each technique's contribution
+  measurable. You see EXACTLY how much each step improved scores.

@@ -1,0 +1,355 @@
+======================================================================
+  PROMPT ENGINEERING TECHNIQUES - EVALUATION REPORT
+  Date: 2026-05-12_16-50-31
+  Model: glm-4.5-air
+  Test cases: 2
+======================================================================
+
+======================================================================
+  SCORE PROGRESSION
+======================================================================
+
+  Step 1 [Be Clear and Direct      ] 5.0/10
+  Step 2 [Be Specific              ] 5.0/10 (0.0 vs previous)
+  Step 3 [Use XML Tags             ] 7.0/10 (+2.0 vs previous)
+  Step 4 [Provide Examples         ] 7.0/10 (0.0 vs previous)
+
+======================================================================
+  TECHNIQUES EXPLAINED
+======================================================================
+
+  Step 1: Be Clear and Direct
+    What changed: A naive prompt with no guidance. Just asks the question.
+    Why it helps: No guidelines, no structure, no examples. The model guesses what you want.
+
+  Step 2: Be Specific
+    What changed: Add output quality guidelines and process steps.
+    Why it helps: Explicit instructions: calorie count, macro breakdown, meal timing, portion sizes in grams.
+
+  Step 3: Use XML Tags
+    What changed: Structure content with clear boundaries using XML tags.
+    Why it helps: Wrap athlete data in <athlete_information> tags. Model can distinguish instructions from data.
+
+  Step 4: Provide Examples
+    What changed: Add a sample input/output pair to demonstrate ideal output.
+    Why it helps: Shows model exactly what 'good' looks like. Calibrates format, tone, detail level.
+
+======================================================================
+  STEP 1: BE CLEAR AND DIRECT
+  Average Score: 5.0/10
+======================================================================
+
+  Technique applied: Naive baseline. Just asks 'What should this person eat?' with no guidance on format, structure, or detail level.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a professional basketball player aiming for mus
+----------------------------------------------------------------------
+
+  height: 6'8"
+  weight: 240 lbs
+  goal: muscle gain
+  restrictions: lactose intolerance
+
+  Criteria: 1 meal plan covers 3 meals, no dairy or lactose, high-protein for muscle growth, within 400 tokens
+
+  Score: 3/10
+  Reasoning: The solution violates two of the core criteria. First, it is not 'compact, concise' and is well over 400 tokens. Second, it explicitly provides a 6-meal plan (Breakfast, Mid-Morning Snack, Lunch, Pre-Workout Snack, Dinner, Post-Workout), which directly contradicts the '1 day meal plan for 3 meals' requirement. While it excels at the mandatory requirements of providing daily calories, macros, and lactose-free foods, these fundamental structural failures significantly lower its quality.
+  Strengths: Provides a detailed caloric and macronutrient breakdown, Clearly lists food choices and sources that are lactose-free, Includes multiple meals and snacks to hit calorie targets
+  Weaknesses: The meal plan is not compact or concise, significantly exceeding the 400-token limit, The plan includes more than 3 meals, violating a primary criterion
+
+  Output:
+    Of course. Given your specific stats, goals, and dietary restriction, here is a comprehensive guide on what you should eat to gain muscle effectively.
+    
+    First, let's understand your starting point.
+    
+    ### **1. Calorie and Macronutrient Targets**
+    
+    For a 6'8" (203 cm) male weighing 240 lbs (109 kg), your TDEE (Total Daily Energy Expenditure) is likely around **3,000 - 3,400 calories** to maintain your current weight. To gain muscle, you need to be in a caloric surplus. A surplus of 300-500 calories per day is a good, sustainable starting point.
+    
+    *   **Total Daily Calories for Muscle Gain:** **3,300 - 3,900 calories**
+    
+    Now, let's break those calories down into macronutrients (Protein, Carbs, and Fat).
+    
+    #### **Protein (The Most Critical Macronutrient)**
+    Protein is the building block of muscle. Your body needs a significant amount to repair and grow new tissue.
+    *   **Target:** **1.6 - 2.2 grams of protein per kilogram of bodyweight.**
+    ... (98 more lines)
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a marathon runner in weight maintenance phase w
+----------------------------------------------------------------------
+
+  height: 175 cm
+  weight: 70 kg
+  goal: weight maintenance
+  restrictions: gluten sensitivity
+
+  Criteria: Plan covers 3 main meals and 2-3 snacks, Total estimated calories align with marathoner's maintenance needs, All meals are naturally gluten-free, Plan is nutritionally balanced with adequate protein, carbs, and fats
+
+  Score: 7/10
+  Reasoning: The solution addresses several key aspects of the task, including weight maintenance principles, nutritional balance, and strict adherence to a gluten-free diet. It successfully provides meals with exact foods and portions. However, it fails to meet two critical mandatory requirements: it does not provide a single, consolidated daily caloric total, and it omits specific timing for the meals. These omissions are significant and prevent a higher score, as they are explicitly listed as mandatory. The plan is also less 'compact and concise' and more of an extensive guide, which slightly deviates from the original task phrasing.
+  Strengths: The plan is comprehensive in its nutritional principles, offering a calorie target, macronutrient breakdown, and a sample meal plan., It effectively addresses the restriction of gluten sensitivity by providing detailed lists of foods to embrace and avoid, emphasizing the importance of label-reading., The provided sample meal plan includes exact foods and approximate portions for three meals and two snacks, satisfying part of the mandatory requirements., The plan is nutritionally balanced, incorporating adequate protein, complex carbohydrates, and healthy fats from a variety of sources.
+  Weaknesses: It fails to provide a single, consolidated daily caloric total. The figures are presented as ranges (e.g., 2,200-2,400) and approximate per-meal (e.g., approx. 450 calories), rather than a final sum, which violates a mandatory requirement., The meals are provided without specific timing (e.g., 8:00 AM, 1:00 PM), which is a mandatory requirement., The meal plan's total calorie count is not explicitly calculated and summed to show it aligns with the target range., The overall solution is more of a detailed guide or template rather than a 'compact, concise' 1-day plan as requested in the task description.
+
+  Output:
+    Of course! Based on the information provided, here is a comprehensive guide for what this person should eat to maintain their weight while managing a gluten sensitivity.
+    
+    ### Quick Summary: The Core Principles
+    
+    For a person who is 175 cm (5'9") and 70 kg (154 lbs) with a healthy BMI of 22.9, weight maintenance is about balance. The goal is to consume roughly the same number of calories you burn each day. A good starting point would be around **2,200-2,400 calories**, but this should be adjusted based on your personal activity level.
+    
+    With a gluten sensitivity, the focus is on choosing naturally gluten-free whole foods and being a careful label-reader to avoid hidden gluten.
+    
+    ---
+    
+    ### 1. Calorie & Macronutrient Breakdown
+    
+    To maintain your weight, your daily intake should be roughly balanced.
+    
+    *   **Calories:** Aim for **2,200-2,400 calories** per day.
+    ... (98 more lines)
+
+======================================================================
+  STEP 2: BE SPECIFIC
+  Average Score: 5.0/10
+======================================================================
+
+  Technique applied: Adds explicit guidelines: calorie count, macro breakdown, meal timing, portion sizes in grams, budget-friendly.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a professional basketball player aiming for mus
+----------------------------------------------------------------------
+
+  height: 6'8"
+  weight: 240 lbs
+  goal: muscle gain
+  restrictions: lactose intolerance
+
+  Criteria: 1 meal plan covers 3 meals, no dairy or lactose, high-protein for muscle growth, within 400 tokens
+
+  Score: 3/10
+  Reasoning: The solution fails to meet the primary criterion of '1 meal plan covers 3 meals'. The provided plan includes a pre-workout, post-workout, lunch, afternoon snack, dinner, and a before-bed meal, totaling six meals. Since this is a violation of a core requirement, the solution is significantly deficient.
+  Strengths: Includes daily caloric total and macronutrient breakdown, Provides meals with exact foods, portions, and timing, Excludes all dairy and lactose products
+  Weaknesses: Does not cover 3 meals, it covers 6
+
+  Output:
+    Here’s a **one-day meal plan** for an **athlete (6'8", 240 lbs, muscle gain, lactose intolerance)** designed to support **caloric surplus, high protein, and proper nutrient timing**. This plan is **budget-friendly** and avoids all dairy products.
+    
+    ---
+    
+    ### **Daily Calorie & Macro Targets**  
+    - **Calories**: ~3,500 (surplus for muscle growth)  
+    - **Protein**: 225g (0.94g per lb bodyweight)  
+    - **Carbs**: 450g (5.1g per lb bodyweight)  
+    - **Fat**: 90g (0.34g per lb bodyweight)  
+    
+    ---
+    
+    ### **One-Day Meal Plan**  
+    #### **Pre-Workout (7:30 AM)**  
+    - **Meal**: Overnight oats with plant-based protein  
+    ... (64 more lines)
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a marathon runner in weight maintenance phase w
+----------------------------------------------------------------------
+
+  height: 175 cm
+  weight: 70 kg
+  goal: weight maintenance
+  restrictions: gluten sensitivity
+
+  Criteria: Plan covers 3 main meals and 2-3 snacks, Total estimated calories align with marathoner's maintenance needs, All meals are naturally gluten-free, Plan is nutritionally balanced with adequate protein, carbs, and fats
+
+  Score: 7/10
+  Reasoning: The solution fully meets the mandatory requirements, as it includes the daily caloric total, macronutrient breakdown, and specifies meals with foods, portions, and timing. It also successfully covers 3 main meals and 3 snacks, and all items are gluten-free. However, there is a major inconsistency between the stated target (2,500 kcal) and the actual calculated total of the meal plan (2,300 kcal). Similarly, the macro totals (Protein: 158g vs 140g target, Carbs: 221g vs 313g target) deviate significantly from the targets. These inaccuracies in the final accounting detract from the plan's reliability as a 'precise' solution, justifying a score of 7.
+  Strengths: Meets all mandatory criteria, Provides a comprehensive daily caloric and macronutrient target, All meals are explicitly gluten-free
+  Weaknesses: The total calorie calculation is inaccurate and significantly lower than the stated target, Total carbohydrate and protein totals are significantly lower than the target values
+
+  Output:
+    Here’s a **one-day gluten-free meal plan** tailored for a **70 kg athlete (175 cm) in weight maintenance**, with precise macronutrient breakdowns and portion sizes.  
+    
+    ---
+    
+    ### **Daily Calorie & Macronutrient Target**  
+    - **Calories:** ~2,500 kcal (for maintenance, based on moderate-high training volume)  
+    - **Protein:** 140 g (22% of calories)  
+    - **Carbs:** 313 g (50% of calories)  
+    - **Fat:** 78 g (28% of calories)  
+    
+    ---
+    
+    ### **Meal Plan (Gluten-Free & Budget-Friendly)**  
+    
+    #### **1. Breakfast (7:00 AM)** – Post-Workout Recovery  
+    ... (55 more lines)
+
+======================================================================
+  STEP 3: USE XML TAGS
+  Average Score: 7.0/10
+======================================================================
+
+  Technique applied: Wraps athlete data in <athlete_information> XML tags for clear boundaries between instructions and data.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a professional basketball player aiming for mus
+----------------------------------------------------------------------
+
+  height: 6'8"
+  weight: 240 lbs
+  goal: muscle gain
+  restrictions: lactose intolerance
+
+  Criteria: 1 meal plan covers 3 meals, no dairy or lactose, high-protein for muscle growth, within 400 tokens
+
+  Score: 7/10
+  Reasoning: The solution is well-structured, detailed, and effectively meets the mandatory requirements of providing a daily caloric total, a macronutrient breakdown, and meals with specific foods, portions, and timing. It also adheres to the restriction of being lactose-free. However, it fails to meet the secondary criterion of covering 'only 3 meals,' as it provides a 6-meal plan. This results in a significant deficiency and prevents a higher score.
+  Strengths: Provides a daily caloric total and macronutrient breakdown, Includes meals with exact foods, portions, and timing, Effectively avoids dairy and lactose
+  Weaknesses: Does not cover only 3 meals, as required by the criteria
+
+  Output:
+    ### **One-Day Meal Plan for a Muscle-Gaining Athlete (Lactose Intolerant)**  
+    **Athlete Stats:**  
+    - Height: 6'8" (203 cm)  
+    - Weight: 240 lbs (109 kg)  
+    - Goal: **Muscle Gain** (Caloric surplus + high protein)  
+    - Dietary Restriction: **Lactose Intolerant** (No dairy products)  
+    
+    **Estimated Daily Nutrition Targets:**  
+    - **Calories:** ~3,200 (500+ surplus for muscle growth)  
+    - **Protein:** 200g (1.8g/kg bodyweight)  
+    - **Carbs:** 400g (Primary energy for training)  
+    - **Fat:** 90g (Hormone support & satiety)  
+    
+    ---
+    
+    ... (61 more lines)
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a marathon runner in weight maintenance phase w
+----------------------------------------------------------------------
+
+  height: 175 cm
+  weight: 70 kg
+  goal: weight maintenance
+  restrictions: gluten sensitivity
+
+  Criteria: Plan covers 3 main meals and 2-3 snacks, Total estimated calories align with marathoner's maintenance needs, All meals are naturally gluten-free, Plan is nutritionally balanced with adequate protein, carbs, and fats
+
+  Score: 7/10
+  Reasoning: The solution is rigorously evaluated against the provided criteria. It fully complies with the mandatory requirements, providing a detailed breakdown of calories, macros, and meals, which is the foundation for a score above 3. It also meets the secondary criteria of being nutritionally balanced and gluten-free. However, significant discrepancies exist between the stated macronutrient targets (300g C, 80g F) and the actual totals achieved (245g C, 92g F), indicating a lack of internal precision. This prevents a perfect score. While not a mandatory failure, this inconsistency is a notable weakness. The mention of a 'marathoner' is a minor error as it's not in the original task inputs. The solution is strong but not without flaws.
+  Strengths: Meets all mandatory requirements with clear daily caloric total, macronutrient breakdown, and specific meals with portions and timing., Nutritionally balanced with adequate protein, carbohydrates, and fats for an athlete's maintenance needs., All meals are explicitly gluten-free, addressing the user's restriction.
+  Weaknesses: The total carbohydrate count (245g) is significantly lower than the stated target in the breakdown (~300g), which is a discrepancy., The plan includes a 'marathoner' in the evaluation criteria, but the task inputs only specify a general 'athlete' with a 'weight maintenance' goal., The total fat count (92g) is higher than the stated target (~80g).
+
+  Output:
+    Here’s a **one-day gluten-free meal plan** tailored for a 70 kg (175 cm) athlete aiming for **weight maintenance**, with a focus on **optimal nutrient timing**, **protein for muscle recovery**, and **gluten-free whole foods**.  
+    
+    ---
+    
+    ### **Daily Calorie Target: ~2,500 kcal**  
+    *(Based on maintenance needs for an active athlete: 1.6-2.0g protein/kg, adequate carbs for fuel, and balanced fats.)*  
+    
+    ---
+    
+    ### **Macronutrient Breakdown**  
+    - **Protein:** ~140g (2.0g/kg body weight)  
+    - **Carbohydrates:** ~300g (4.3g/kg body weight)  
+    - **Fat:** ~80g (30% of calories)  
+    
+    ---
+    ... (80 more lines)
+
+======================================================================
+  STEP 4: PROVIDE EXAMPLES
+  Average Score: 7.0/10
+======================================================================
+
+  Technique applied: Adds a complete sample input/output pair showing the exact format, detail level, and structure expected.
+
+----------------------------------------------------------------------
+  Test Case 1: Testing with a professional basketball player aiming for mus
+----------------------------------------------------------------------
+
+  height: 6'8"
+  weight: 240 lbs
+  goal: muscle gain
+  restrictions: lactose intolerance
+
+  Criteria: 1 meal plan covers 3 meals, no dairy or lactose, high-protein for muscle growth, within 400 tokens
+
+  Score: 7/10
+  Reasoning: The solution meets all mandatory requirements: it provides a daily caloric total (3,550), a macronutrient breakdown (Protein 220g, Fat 110g, Carbs 410g), and lists all meals with exact foods, portions, and timing. It also successfully adheres to the 'no dairy or lactose' restriction by using almond milk and protein isolates, and is 'high-protein for muscle growth' with a target of 220g of protein. However, it fails the secondary criteria of being 'within 400 tokens', as the response is significantly longer than that limit. Therefore, the score is 7.
+  Strengths: The meal plan includes a daily caloric total., The meal plan includes a macronutrient breakdown., The meals list exact foods, portions, and timing., All dairy products are replaced with lactose-free alternatives., The meal plan is high-protein and tailored for muscle gain.
+  Weaknesses: 
+
+  Output:
+    Here is a one-day meal plan for a 6'8", 240 lb athlete aiming for muscle gain while managing lactose intolerance.
+    
+    *   **Calorie Target:** Approximately 3,550 calories
+    *   **Macronutrient Breakdown:** Protein (220g), Fat (110g), Carbs (410g)
+    
+    **Meal Plan:**
+    
+    *   **Breakfast (7:30 AM):** Protein smoothie made with unsweetened almond milk (500g), whey protein isolate (60g), banana (150g), oats (50g dry weight), and a tablespoon of chia seeds (12g).
+        *   Protein: 60g, Fat: 8g, Carbs: 100g
+    *   **Mid-Morning Snack (10:30 AM):** Tuna salad made with canned tuna in water (100g), olive oil-based mayonnaise (30g), served with a side of whole-grain crackers (30g).
+        *   Protein: 30g, Fat: 25g, Carbs: 35g
+    *   **Lunch (1:00 PM):** Large chicken and rice bowl with grilled chicken breast (200g), brown rice (120g dry weight), black beans (80g), and steamed broccoli (200g) seasoned with olive oil spray (5g).
+        *   Protein: 55g, Fat: 10g, Carbs: 120g
+    *   **Afternoon Pre-Workout Snack (4:00 PM):** An apple (150g) with two tablespoons of almond butter (32g).
+        *   Protein: 6g, Fat: 16g, Carbs: 30g
+    ... (5 more lines)
+
+----------------------------------------------------------------------
+  Test Case 2: Testing with a marathon runner in weight maintenance phase w
+----------------------------------------------------------------------
+
+  height: 175 cm
+  weight: 70 kg
+  goal: weight maintenance
+  restrictions: gluten sensitivity
+
+  Criteria: Plan covers 3 main meals and 2-3 snacks, Total estimated calories align with marathoner's maintenance needs, All meals are naturally gluten-free, Plan is nutritionally balanced with adequate protein, carbs, and fats
+
+  Score: 7/10
+  Reasoning: The solution successfully fulfills all mandatory requirements: it includes daily caloric/macros, lists exact foods/portions/timing, and covers 3 meals/3 snacks. It also meets the secondary criteria of being gluten-free. However, it fails the 'calories align with maintenance needs' secondary criteria. The calorie target is high for a 70kg individual in maintenance, and the protein value is unrealistically high, suggesting a poorly calculated and imbalanced plan that does not represent a sensible 'maintenance' diet for an athlete.
+  Strengths: The plan clearly lists 3 main meals and 3 snacks, meeting the meal frequency requirement., The total caloric target (2250) and macronutrient breakdown (140g P, 70g F, 300g C) are explicitly provided., All foods and ingredients listed are naturally gluten-free, meeting the restriction perfectly.
+  Weaknesses: 
+
+  Output:
+    Here is a one-day meal plan for an athlete with gluten sensitivity aiming to maintain their weight:
+    
+    *   **Calorie Target:** Approximately 2250 calories
+    *   **Macronutrient Breakdown:** Protein (140g), Fat (70g), Carbs (300g)
+    
+    **Meal Plan:**
+    
+    *   **Breakfast (7:00 AM):** Gluten-free oatmeal (70g dry weight) mixed with raspberries (100g), chia seeds (15g), and unsweetened almond milk (300g).
+        *   Protein: 12g, Fat: 12g, Carbs: 55g
+    *   **Mid-Morning Snack (10:00 AM):** Hard-boiled eggs (2 large, approx. 106g total) and a pear (150g).
+        *   Protein: 14g, Fat: 10g, Carbs: 25g
+    *   **Lunch (1:00 PM):** Quinoa and black bean salad with grilled chicken breast (110g). The salad includes cooked quinoa (75g dry weight), canned black beans (120g, rinsed), corn (80g), diced bell pepper (80g), avocado (50g), and a lime-tahini dressing (made with 15g tahini and juice from half a lime).
+        *   Protein: 42g, Fat: 18g, Carbs: 80g
+    *   **Afternoon Snack (4:00 PM):** Rice cakes (2 cakes, approx. 30g total) with hummus (45g) and cucumber slices (100g).
+        *   Protein: 7g, Fat: 8g, Carbs: 45g
+    ... (5 more lines)
+
+======================================================================
+  KEY TAKEAWAYS
+======================================================================
+
+  1. BE CLEAR AND DIRECT: Start with a simple, clear ask.
+     This is your baseline. Low scores are expected.
+
+  2. BE SPECIFIC: Add guidelines for format, content, and detail level.
+     This typically produces the LARGEST score improvement.
+
+  3. USE XML TAGS: Structure your prompt with clear boundaries.
+     Impact grows with prompt complexity and data volume.
+
+  4. PROVIDE EXAMPLES: Show, don't tell.
+     One good example calibrates format, tone, and detail better
+     than paragraphs of instructions.
+
+  The evaluation pipeline makes each technique's contribution
+  measurable. You see EXACTLY how much each step improved scores.

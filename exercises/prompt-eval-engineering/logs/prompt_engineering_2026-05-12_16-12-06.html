@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Engineering Techniques - Evaluation Report</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+        color: #333;
+    }
+    .header {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    .header h1 { margin: 0 0 10px 0; }
+    .header p { margin: 0; opacity: 0.8; }
+    .progression {
+        display: flex;
+        align-items: flex-end;
+        gap: 20px;
+        margin: 30px 0;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .bar-container {
+        flex: 1;
+        text-align: center;
+    }
+    .bar-wrapper {
+        height: 200px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    .bar {
+        width: 80px;
+        border-radius: 8px 8px 0 0;
+        transition: height 0.5s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        padding-bottom: 10px;
+    }
+    .bar-step1 { background: linear-gradient(180deg, #e74c3c, #c0392b); }
+    .bar-step2 { background: linear-gradient(180deg, #f39c12, #e67e22); }
+    .bar-step3 { background: linear-gradient(180deg, #3498db, #2980b9); }
+    .bar-step4 { background: linear-gradient(180deg, #2ecc71, #27ae60); }
+    .bar-label {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+        line-height: 1.3;
+    }
+    .bar-technique {
+        font-weight: bold;
+        color: #333;
+        font-size: 13px;
+    }
+    .summary-cards {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+    .card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        flex: 1;
+        min-width: 200px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-top: 4px solid #333;
+    }
+    .card.step1 { border-top-color: #e74c3c; }
+    .card.step2 { border-top-color: #f39c12; }
+    .card.step3 { border-top-color: #3498db; }
+    .card.step4 { border-top-color: #2ecc71; }
+    .card-title { font-size: 14px; color: #888; margin-bottom: 5px; }
+    .card-score { font-size: 28px; font-weight: bold; }
+    .card-detail { font-size: 12px; color: #666; margin-top: 5px; }
+    .card.best { background: #f0fff0; }
+    .section {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .section h2 { margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    .technique-explain {
+        background: #f8f9fa;
+        border-left: 4px solid #666;
+        padding: 15px;
+        margin: 15px 0;
+        font-size: 14px;
+    }
+    .technique-explain code {
+        background: #e8e8e8;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 13px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    th {
+        background-color: #1a1a2e;
+        color: white;
+        text-align: left;
+        padding: 12px;
+        font-size: 13px;
+    }
+    td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+        font-size: 13px;
+    }
+    tr:hover { background-color: #f8f9fa; }
+    .score-badge {
+        font-weight: bold;
+        padding: 4px 12px;
+        border-radius: 20px;
+        display: inline-block;
+        font-size: 14px;
+    }
+    .score-high { background-color: #c8e6c9; color: #2e7d32; }
+    .score-mid { background-color: #fff9c4; color: #f57f17; }
+    .score-low { background-color: #ffcdd2; color: #c62828; }
+    .output-pre {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 8px;
+        font-family: 'Consolas', monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    .delta-positive { color: #27ae60; font-weight: bold; }
+    .delta-negative { color: #e74c3c; font-weight: bold; }
+    .delta-zero { color: #888; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Prompt Engineering Techniques - Evaluation Report</h1>
+    <p>Date: 2026-05-12_16-12-06 | Model: glm-5 | Test Cases: 3</p>
+</div>
+
+<div class="progression">
+    <div style="width: 100px; text-align: right; padding-right: 10px; color: #888; font-size: 13px;">
+        Score<br>out of 10
+    </div>
+
+    <div class="bar-container">
+        <div class="bar-wrapper">
+            <div class="bar bar-step1" style="height: 20px;">
+                1.0
+            </div>
+        </div>
+        <div class="bar-technique">Step 1</div>
+        <div class="bar-label">Be Clear and Direct</div>
+    </div>
+
+    <div class="bar-container">
+        <div class="bar-wrapper">
+            <div class="bar bar-step2" style="height: 42px;">
+                2.3
+            </div>
+        </div>
+        <div class="bar-technique">Step 2</div>
+        <div class="bar-label">Be Specific</div>
+    </div>
+
+    <div class="bar-container">
+        <div class="bar-wrapper">
+            <div class="bar bar-step3" style="height: 42px;">
+                2.3
+            </div>
+        </div>
+        <div class="bar-technique">Step 3</div>
+        <div class="bar-label">Use XML Tags</div>
+    </div>
+
+    <div class="bar-container">
+        <div class="bar-wrapper">
+            <div class="bar bar-step4" style="height: 20px;">
+                1.0
+            </div>
+        </div>
+        <div class="bar-technique">Step 4</div>
+        <div class="bar-label">Provide Examples</div>
+    </div>
+
+</div>
+
+<div class="summary-cards">
+
+    <div class="card step1 ">
+        <div class="card-title">Step 1: Be Clear and Direct</div>
+        <div class="card-score">1.0 / 10</div>
+        <div class="card-detail">Pass rate (>7): 0%</div>
+        <div class="card-detail">Range: 1-1</div>
+        
+    </div>
+
+    <div class="card step2 best">
+        <div class="card-title">Step 2: Be Specific</div>
+        <div class="card-score">2.3 / 10</div>
+        <div class="card-detail">Pass rate (>7): 0%</div>
+        <div class="card-detail">Range: 1-5</div>
+        <div class="card-detail delta-positive">+1.3 vs previous</div>
+    </div>
+
+    <div class="card step3 best">
+        <div class="card-title">Step 3: Use XML Tags</div>
+        <div class="card-score">2.3 / 10</div>
+        <div class="card-detail">Pass rate (>7): 0%</div>
+        <div class="card-detail">Range: 1-5</div>
+        <div class="card-detail delta-zero">0.0 vs previous</div>
+    </div>
+
+    <div class="card step4 ">
+        <div class="card-title">Step 4: Provide Examples</div>
+        <div class="card-score">1.0 / 10</div>
+        <div class="card-detail">Pass rate (>7): 0%</div>
+        <div class="card-detail">Range: 1-1</div>
+        <div class="card-detail delta-negative">-1.3 vs previous</div>
+    </div>
+
+</div>
+
+<div class="section">
+    <h2>Step 1: Be Clear and Direct &mdash; Average Score: 1.0/10</h2>
+    <div class="technique-explain">
+        Naive baseline. Just asks 'What should this person eat?' with no guidance on format, structure, or detail level.
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:15%">Scenario</th>
+                <th style="width:35%">Output (truncated)</th>
+                <th style="width:8%">Score</th>
+                <th style="width:22%">Reasoning</th>
+                <th style="width:10%">Strengths</th>
+                <th style="width:10%">Weaknesses</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>Testing with a competitive swimmer who needs high-carb meals and has celiac disease requiring gluten-free options</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The solution is entirely empty, failing every mandatory requirement. There is no meal plan, no caloric total, no macronutrient breakdown, and no foods listed. This is an automatic failure as it violates all mandatory requirements listed in the evaluation criteria.</td>
+                <td></td>
+                <td>Solution is completely empty - no content provided, Missing daily caloric total, Missing macronutrient breakdown, Missing all meals with exact foods, portions, and timing, No meals or snacks included, Cannot verify gluten-free compliance, Cannot verify high-carbohydrate focus</td>
+            </tr>
+
+            <tr>
+                <td>Testing with a lightweight rower trying to maintain weight class while fueling intense training, with a vegan diet restriction</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The solution section is empty. There is no meal plan to evaluate. This fails all mandatory requirements as it contains no caloric total, no macronutrient breakdown, and no meals with foods, portions, or timing. Since the mandatory requirements are completely absent, this receives the lowest possible score.</td>
+                <td></td>
+                <td>Solution is completely empty, No meals provided, No caloric total, No macronutrient breakdown, No foods, portions, or timing information</td>
+            </tr>
+
+            <tr>
+                <td>Testing with a gymnast focused on lean muscle maintenance with multiple food allergies (nuts and dairy)</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The provided solution is blank and contains absolutely no text. As a result, it fails to meet every single mandatory requirement and secondary criterion, resulting in the lowest possible score.</td>
+                <td></td>
+                <td>The solution is completely empty., Fails to include a daily caloric total., Fails to include a macronutrient breakdown., Fails to include meals with exact foods, portions, and timing., Fails to exclude nuts and dairy (as no ingredients were provided)., Fails to incorporate high-protein components.</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Step 2: Be Specific &mdash; Average Score: 2.3/10</h2>
+    <div class="technique-explain">
+        Adds explicit guidelines: calorie count, macro breakdown, meal timing, portion sizes in grams, budget-friendly.
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:15%">Scenario</th>
+                <th style="width:35%">Output (truncated)</th>
+                <th style="width:8%">Score</th>
+                <th style="width:22%">Reasoning</th>
+                <th style="width:10%">Strengths</th>
+                <th style="width:10%">Weaknesses</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>Testing with a competitive swimmer who needs high-carb meals and has celiac disease requiring gluten-free options</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The solution is entirely blank with no meal plan content whatsoever. It fails every single mandatory requirement: no daily caloric total, no macronutrient breakdown, and no meals with exact foods, portions, or timing. This is a complete failure to address the task.</td>
+                <td></td>
+                <td>Solution is completely empty - no content provided, Missing daily caloric total, Missing macronutrient breakdown, Missing meals with exact foods, portions, and timing, Missing three main meals and at least two snacks, No gluten-free foods listed, No high-carbohydrate focus demonstrated</td>
+            </tr>
+
+            <tr>
+                <td>Testing with a lightweight rower trying to maintain weight class while fueling intense training, with a vegan diet restriction</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-mid">5</span></td>
+                <td>Fallback: grader returned non-JSON output</td>
+                <td>N/A</td>
+                <td>Grader output could not be parsed</td>
+            </tr>
+
+            <tr>
+                <td>Testing with a gymnast focused on lean muscle maintenance with multiple food allergies (nuts and dairy)</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The provided solution is entirely blank. As a result, it automatically fails all mandatory requirements (missing caloric total, macronutrient breakdown, and meals with exact foods, portions, and timing), warranting a score of 1.</td>
+                <td></td>
+                <td>The solution is completely empty., Fails to provide any meals, portions, or timing., Fails to include daily caloric total and macronutrient breakdown., Fails to meet any of the specified criteria.</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Step 3: Use XML Tags &mdash; Average Score: 2.3/10</h2>
+    <div class="technique-explain">
+        Wraps athlete data in <athlete_information> XML tags for clear boundaries between instructions and data.
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:15%">Scenario</th>
+                <th style="width:35%">Output (truncated)</th>
+                <th style="width:8%">Score</th>
+                <th style="width:22%">Reasoning</th>
+                <th style="width:10%">Strengths</th>
+                <th style="width:10%">Weaknesses</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>Testing with a competitive swimmer who needs high-carb meals and has celiac disease requiring gluten-free options</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The solution is entirely blank. It fails to meet any of the mandatory requirements: no daily caloric total, no macronutrient breakdown, and no meals with exact foods, portions, or timing. Since the mandatory requirements are completely absent, this is an automatic failure.</td>
+                <td></td>
+                <td>Solution is completely empty - no content provided, Missing daily caloric total, Missing macronutrient breakdown, Missing meals with exact foods, portions, and timing, No three main meals or two snacks provided, No gluten-free foods listed, No high-carbohydrate meal plan provided, No formatting present</td>
+            </tr>
+
+            <tr>
+                <td>Testing with a lightweight rower trying to maintain weight class while fueling intense training, with a vegan diet restriction</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-mid">5</span></td>
+                <td>Fallback: grader returned non-JSON output</td>
+                <td>N/A</td>
+                <td>Grader output could not be parsed</td>
+            </tr>
+
+            <tr>
+                <td>Testing with a gymnast focused on lean muscle maintenance with multiple food allergies (nuts and dairy)</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The solution is entirely empty. It fails to meet any of the mandatory requirements (no caloric total, no macronutrient breakdown, no meals with exact foods/portions/timing) and fails all secondary criteria (no meals provided at all, cannot verify dietary restrictions, no protein components mentioned, not a complete meal plan). This is a complete failure to address the task.</td>
+                <td></td>
+                <td>Solution is completely empty - no content provided, Missing daily caloric total, Missing macronutrient breakdown, Missing any meal plans with foods, portions, or timing, Fails all mandatory requirements</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Step 4: Provide Examples &mdash; Average Score: 1.0/10</h2>
+    <div class="technique-explain">
+        Adds a complete sample input/output pair showing the exact format, detail level, and structure expected.
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:15%">Scenario</th>
+                <th style="width:35%">Output (truncated)</th>
+                <th style="width:8%">Score</th>
+                <th style="width:22%">Reasoning</th>
+                <th style="width:10%">Strengths</th>
+                <th style="width:10%">Weaknesses</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>Testing with a competitive swimmer who needs high-carb meals and has celiac disease requiring gluten-free options</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The solution is entirely blank. It fails all mandatory requirements (no caloric total, no macronutrient breakdown, no meals with exact foods/ports/timing) and all secondary criteria (no three main meals, no two snacks, no gluten-free foods listed, no high-carbohydrate focus, no formatting at all). This is a complete failure to address the task.</td>
+                <td></td>
+                <td>The solution is completely empty - no content was provided whatsoever, No meals, snacks, or food items are listed, No daily caloric total provided, No macronutrient breakdown provided, No portion sizes or timing information, Fails every single mandatory and secondary criterion</td>
+            </tr>
+
+            <tr>
+                <td>Testing with a lightweight rower trying to maintain weight class while fueling intense training, with a vegan diet restriction</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The solution is completely empty and fails to meet any of the mandatory requirements or criteria. It provides no meal plan, nutritional information, or any content at all.</td>
+                <td></td>
+                <td>Solution is completely empty, Fails to include daily caloric total, Fails to include macronutrient breakdown, Fails to include meals with exact foods, portions, and timing, Fails to include three main meals and at least one snack, Fails to provide vegan ingredients, Fails to provide appropriate nutritional profile for an athlete</td>
+            </tr>
+
+            <tr>
+                <td>Testing with a gymnast focused on lean muscle maintenance with multiple food allergies (nuts and dairy)</td>
+                <td><div class="output-pre"></div></td>
+                <td><span class="score-badge score-low">1</span></td>
+                <td>The provided solution is entirely blank, failing to generate any content. It fails every single mandatory and secondary criterion specified in the evaluation rubric. Because it misses all mandatory requirements (calories, macros, exact meals/ports/timing), it automatically receives a failing score.</td>
+                <td></td>
+                <td>The solution is completely empty., Fails to provide a daily caloric total., Fails to provide a macronutrient breakdown., Fails to provide meals with exact foods, portions, and timing., Does not include breakfast, lunch, dinner, and a snack., Does not explicitly exclude nuts and dairy (as there are no ingredients listed)., Does not incorporate high-protein components., Does not remain compact and concise under 300 words (0 words).</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Key Takeaways</h2>
+    <div class="technique-explain">
+        <strong>Step 1: Be Clear and Direct</strong><br>
+        A naive prompt with no guidance. The model has to guess what format, detail level,
+        and structure you want. Expect low, inconsistent scores.
+    </div>
+    <div class="technique-explain">
+        <strong>Step 2: Be Specific</strong><br>
+        Adding explicit guidelines (calorie count, macro breakdown, meal timing, portion sizes)
+        gives the model a clear target. This typically produces the largest score jump.
+    </div>
+    <div class="technique-explain">
+        <strong>Step 3: Use XML Tags</strong><br>
+        Wrapping content in XML tags like &lt;athlete_information&gt; creates clear boundaries.
+        The model can distinguish instructions from data, reducing confusion.
+        Impact grows with prompt complexity.
+    </div>
+    <div class="technique-explain">
+        <strong>Step 4: Provide Examples</strong><br>
+        A sample input/output pair shows the model exactly what "good" looks like.
+        This is especially powerful for format, tone, and detail-level calibration.
+        Find your best-scored outputs from evaluations and use them as examples.
+    </div>
+    <p>
+        <strong>The evaluation pipeline makes this process objective.</strong>
+        Instead of "this prompt feels better," you get:
+        Step 1 scored X, Step 2 scored Y, Step 3 scored Z, Step 4 scored W.
+        Each technique's contribution is measurable.
+    </p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,254 @@
+======================================================================
+  PROMPT EVALUATION REPORT
+  Date: 2026-05-12 16:54:07
+  Model: glm-4.5-air
+  Dataset size: 3 test cases
+======================================================================
+
+======================================================================
+  METHODOLOGY
+======================================================================
+
+  Two prompt versions tested on the same dataset:
+
+  PROMPT V1 (naive):
+    "Please solve the following task: {task}"
+    No formatting instructions. No constraints.
+
+  PROMPT V2 (improved):
+    Explicit format rules + assistant prefilling + stop sequence.
+    "Respond only with Python, JSON, or Regex. No comments. No markdown."
+    Prefills assistant with backtick to steer code output.
+    Uses stop sequence to cut off markdown wrapping.
+
+  GRADING (each output gets TWO scores averaged together):
+
+  CODE GRADER (syntax validation):
+    JSON  -> json.loads() — returns 10 (valid) or 0 (invalid)
+    Python -> ast.parse()  — returns 10 (valid) or 0 (invalid)
+    Regex -> re.compile()  — returns 10 (valid) or 0 (invalid)
+    Fast, free, deterministic. Checks STRUCTURE only.
+
+  MODEL GRADER (quality evaluation):
+    Sends output to API with eval prompt asking for:
+    - strengths (1-3 items)
+    - weaknesses (1-3 items)
+    - reasoning (why this score)
+    - score (1-10)
+    Uses solution_criteria from test case for targeted evaluation.
+    Flexible but costs an API call. Checks QUALITY.
+
+  COMBINED SCORE = (syntax_score + model_score) / 2
+
+======================================================================
+  SUMMARY
+======================================================================
+
+  | Metric              | V1 (naive)   | V2 (improved) | Delta    |
+  |---------------------|--------------|---------------|----------|
+  | Combined Score      |        3.7   |         5.8   |   +2.2   |
+  | Syntax Score        |        0.0   |         6.7   |   +6.7   |
+  | Model Score         |        7.3   |         5.0   |   -2.3   |
+
+  RESULT: V2 is BETTER by 2.2 points on average.
+
+======================================================================
+  TEST CASE 1/3
+======================================================================
+
+  Task: Create a JSON object that represents an AWS EC2 instance with a 'Name' tag of 'web-server', a 'Type' of 't2.micro', and a 'State' of 'running'.
+  Expected format: json
+  Solution criteria: The JSON object must be valid, contain the specified key-value pairs for Name, Type, and State, and should be structured as a single object without any nested arrays.
+
+----------------------------------------------------------------------
+  PROMPT V1 OUTPUT (naive):
+----------------------------------------------------------------------
+
+  Of course. Here is a JSON object representing an AWS EC2 instance with the specified properties.
+  
+  This JSON follows a common structure for representing an EC2 instance, including the specific request for tags, instance type, and state.
+  
+  ```json
+  {
+    "InstanceId": "i-0123456789abcdef0",
+    "State": "running",
+    "InstanceType": "t2.micro",
+    "Tags": [
+      {
+        "Key": "Name",
+        "Value": "web-server"
+      }
+    ],
+    "LaunchTime": "2023-10-27T10:00:00Z"
+  }
+  ```
+  
+  ### Explanation of the Fields:
+  ... (5 more lines)
+
+  Syntax score: 0/10
+  Model score:  8/10
+  Combined:     4.0/10
+  Reasoning:    The solution is functionally correct and meets all requirements. However, it includes extraneous information that could confuse someone looking for a minimal representation of the requested properties.
+  Strengths:    Correctly includes the specified 'Name', 'Type', and 'State' fields., Uses a common and valid JSON structure for an EC2 instance representation.
+  Weaknesses:   The JSON is overly complex for the simple request; the 'InstanceId' and 'LaunchTime' fields are not required.
+
+----------------------------------------------------------------------
+  PROMPT V2 OUTPUT (improved):
+----------------------------------------------------------------------
+
+  
+
+  Syntax score: 0/10
+  Model score:  1/10
+  Combined:     0.5/10
+  Reasoning:    The solution fails to meet the core requirements of the task. It does not create a valid JSON object containing the specified 'Name' tag, and the overall structure is incorrect. The only partial correctness is in the identification of the correct values for the 'Type' and 'State' keys, but without a proper object structure, this is insufficient.
+  Strengths:    The solution correctly uses the required key names: 'Name', 'Type', and 'State'., The values for 'Type' ('t2.micro') and 'State' ('running') are correct as per the task specification.
+  Weaknesses:   The JSON object is missing the required key-value pair for the 'Name' tag., The provided JSON object is not valid, as it appears to be empty or undefined.
+
+======================================================================
+  TEST CASE 2/3
+======================================================================
+
+  Task: Write a Python function that takes a list of AWS resource ARNs (e.g., ['arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890abcdef0', 'arn:aws:s3:us-east-1:123456789012:my-bucket']) and returns only the S3 bucket names.
+  Expected format: python
+  Solution criteria: The function must correctly identify S3 ARNs using a pattern (e.g., 'arn:aws:s3') and extract the bucket name (e.g., 'my-bucket'). It should handle multiple ARNs and return a list of bucket names.
+
+----------------------------------------------------------------------
+  PROMPT V1 OUTPUT (naive):
+----------------------------------------------------------------------
+
+  Of course! Here is a Python function that accomplishes this task, along with explanations and examples.
+  
+  ### The Python Function
+  
+  This function uses a simple, efficient approach by iterating through the list and checking if an ARN string starts with the known S3 ARN prefix.
+  
+  ```python
+  def get_s3_bucket_names(arn_list: list[str]) -> list[str]:
+      """
+      Extracts S3 bucket names from a list of AWS resource ARNs.
+  
+      This function iterates through a list of ARNs and returns a list
+      containing only the names of the S3 buckets found.
+  
+      Args:
+          arn_list: A list of strings, where each string is an AWS ARN.
+                    (e.g., ['arn:aws:ec2:us-east-1:123456789012:instance/i-123456',
+                             'arn:aws:s3:us-east-1:123456789012:my-bucket'])
+  
+      Returns:
+  ... (59 more lines)
+
+  Syntax score: 0/10
+  Model score:  7/10
+  Combined:     3.5/10
+  Reasoning:    The solution is clear, efficient, and effectively solves the problem for the given use case. However, it's robustness is limited by a simplistic ARN pattern check that does not conform to the full ARN specification, and it lacks basic input validation to handle malformed inputs gracefully.
+  Strengths:    The function correctly identifies S3 ARNs by checking for the specific prefix 'arn:aws:s3:::' and accurately extracts the bucket name using string slicing., The solution is efficient, using a simple for-loop to iterate through the input list, which is clear and performant for this task., The code is well-documented with a clear docstring explaining its purpose, arguments, return value, and provides example usage.
+  Weaknesses:   The ARN identification logic is too simplistic and does not follow the official ARN parsing standard. It may incorrectly process valid S3 ARNs that include partitioned prefixes (e.g., 'arn:aws-cn:s3:::') or potentially misidentify other ARNs, although this risk is low for this specific prefix., The function lacks any input validation, such as checking for None or non-string elements in the input `arn_list`, which could lead to runtime errors.
+
+----------------------------------------------------------------------
+  PROMPT V2 OUTPUT (improved):
+----------------------------------------------------------------------
+
+  import re
+  
+  def get_s3_bucket_names(arn_list):
+      s3_buckets = []
+      pattern = r'arn:aws:s3:[^:]+:[^:]+:([^/]+)'
+      for arn in arn_list:
+          match = re.match(pattern, arn)
+          if match:
+              s3_buckets.append(match.group(1))
+      return s3_buckets
+
+  Syntax score: 10/10
+  Model score:  8/10
+  Combined:     9.0/10
+  Reasoning:    The function successfully meets the core requirements by extracting S3 bucket names from a list of ARNs. The regex pattern is generally effective, but has a minor edge case with bucket names containing dots, which could cause parsing issues depending on the context.
+  Strengths:    Correctly identifies S3 ARNs using a precise regex pattern, Handles multiple ARNs in a list and returns a list of extracted names, Code is concise and readable
+  Weaknesses:   The regex pattern might incorrectly parse S3 ARNs that use a virtual-hosted style bucket name with dots (e.g., 'arn:aws:s3:us-east-1:123456789012:my.bucket')
+
+======================================================================
+  TEST CASE 3/3
+======================================================================
+
+  Task: Write a regular expression that matches a standard AWS IAM role ARN, which starts with 'arn:aws:iam::', followed by a 12-digit account ID, ':role/', and ends with the role name.
+  Expected format: regex
+  Solution criteria: The regex must strictly match AWS IAM ARNs (e.g., 'arn:aws:iam::123456789012:role/my-role') and reject invalid formats (e.g., missing 'role/', incorrect account ID length).
+
+----------------------------------------------------------------------
+  PROMPT V1 OUTPUT (naive):
+----------------------------------------------------------------------
+
+  Of course. Here is the regular expression that matches a standard AWS IAM role ARN, along with a detailed explanation.
+  
+  ### The Regular Expression
+  
+  ```regex
+  ^arn:aws:iam::\d{12}:role\/[\w+=,.@-]+$
+  ```
+  
+  ---
+  
+  ### Explanation of the Expression
+  
+  Let's break down each part of the regex:
+  
+  | Component | Part of Regex | Description |
+  | :--- | :--- | :--- |
+  | **Start of String** | `^` | Asserts the position at the start of the string. This ensures the pattern must begin from the very first character. |
+  | **ARN Prefix** | `arn:aws:iam::` | Matches the literal string `arn:aws:iam::` exactly. The double colon (`::`) is included as it's part of the ARN format. |
+  | **Account ID** | `\d{12}` | Matches exactly 12 digits (`0-9`). `\d` is a shorthand for any digit, and `{12}` specifies the quantity. |
+  | **Role Path Separator** | `:role\/` | Matches the literal string `:role/`. The forward slash (`/`) is escaped with a backslash (`\/`) to avoid being interpreted as a regex delimiter (though not strictly necessary in most modern regex engines, it's good practice for clarity). |
+  ... (43 more lines)
+
+  Syntax score: 0/10
+  Model score:  7/10
+  Combined:     3.5/10
+  Reasoning:    The solution correctly handles the static and structural components of the IAM ARN. However, the character class for the role name is inaccurate. While the specification does not define an explicit character set for role names, AWS documentation and AWS CLI behavior indicate that spaces are not permitted. The provided regex would incorrectly validate an ARN containing a space, such as 'arn:aws:iam::123456789012:role/my role'. Therefore, while the core logic is sound, it fails to fully validate the role name component according to AWS conventions.
+  Strengths:    Correctly matches the required structure of the ARN prefix, 12-digit account ID, and resource type 'role/', Effectively anchors the match to the start (^) and end ($) of the string, preventing partial or malformed matches
+  Weaknesses:   The character set for the role name ([\w+=,.@-]) is too permissive and allows for invalid characters like spaces, which are not permitted in IAM role names
+
+----------------------------------------------------------------------
+  PROMPT V2 OUTPUT (improved):
+----------------------------------------------------------------------
+
+  arn:aws:iam::\d{12}:role/.*
+
+  Syntax score: 10/10
+  Model score:  6/10
+  Combined:     8.0/10
+  Reasoning:    The regex correctly identifies the essential components of an IAM ARN: the prefix, the account ID, and the 'role/' segment. However, its permissive '.*' for the role name allows non-standard characters and an empty name, failing to strictly adhere to IAM role naming rules which require alphanumeric characters and certain symbols. This broad matching could lead to false positives.
+  Strengths:    Correctly captures the required prefix 'arn:aws:iam::', Properly validates the 12-digit account ID with \d{12}
+  Weaknesses:   The role name pattern '.*' is too permissive, allowing invalid characters and empty names, Does not strictly enforce the ':role/' path separator, which could allow ambiguous matches
+
+======================================================================
+  KEY TAKEAWAYS
+======================================================================
+
+  1. PROMPT EVALUATION = OBJECTIVE MEASUREMENT
+     Instead of 'this prompt feels better', you get numbers.
+     V1 scored X/10, V2 scored Y/10 — clear, comparable, trackable.
+
+  2. TWO GRADER TYPES COVER DIFFERENT ASPECTS
+     Code grader: 'Is the syntax valid?' (binary, deterministic)
+     Model grader: 'Is the solution correct and helpful?' ( nuanced)
+     Neither alone gives the full picture. Combined = comprehensive.
+
+  3. ITERATION IS THE POINT
+     V1 is your baseline. V2 is your first improvement.
+     The delta between them proves whether your changes helped.
+     Keep iterating: V3, V4, V5... until scores plateau.
+
+  4. DATASET QUALITY MATTERS
+     3 test cases is minimal. Production evals use 50-200+ cases.
+     Include edge cases, ambiguous inputs, and realistic scenarios.
+     The dataset IS your test suite for prompts.
+
+  5. THE THREE OPTIONS AFTER WRITING A PROMPT:
+     Option 1: Test once, ship it.    (risky — breaks in production)
+     Option 2: Test a few times, tweak. (better — still misses edge cases)
+     Option 3: Run through eval pipeline. (best — objective metrics)
+
+  This exercise implements Option 3.

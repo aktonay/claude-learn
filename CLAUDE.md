@@ -106,9 +106,14 @@ Five agents in `.claude/agents/`:
 - `exercises/streaming-demo/` — streaming vs standard response comparison with chunk-by-chunk timeline
 - `exercises/structured-output/` — prefilling + stop sequences for clean JSON/code/commands (no commentary)
 - `exercises/prompt-eval/` — full evaluation pipeline: dataset generation, V1 vs V2 prompts, code grader (syntax) + model grader (quality), combined scoring with formatted report
+- `exercises/prompt-eval-engineering/` — iterative prompt engineering: 4 techniques (be clear, be specific, XML tags, provide examples) measured step-by-step with HTML visual report
 
 ## API Configuration
 
 # ZAI API key lives in root .env (gitignored)
 # Base URL: https://api.z.ai/api/coding/paas/v4/
 # Available models: glm-4.5, glm-4.5-air, glm-4.6, glm-4.7, glm-5, glm-5-turbo, glm-5.1
+# IMPORTANT: All GLM models are reasoning models by default. They consume max_tokens
+# on internal chain-of-thought, leaving 0 visible output when budget is too low.
+# Fix: Pass extra_body={"thinking": {"type": "disabled"}} to disable reasoning.
+# This makes responses fast and direct without wasting tokens on hidden reasoning.

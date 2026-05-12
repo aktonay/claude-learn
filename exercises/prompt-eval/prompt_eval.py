@@ -90,6 +90,7 @@ def chat(messages, system_prompt=None, temperature=1.0, stop=None):
         "max_tokens": 1000,
         "messages": all_messages,
         "temperature": temperature,
+        "extra_body": {"thinking": {"type": "disabled"}},
     }
     if stop:
         params["stop"] = stop
