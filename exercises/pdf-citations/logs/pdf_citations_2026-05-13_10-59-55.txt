@@ -1,0 +1,206 @@
+======================================================================
+  PDF + CITATIONS EXERCISE REPORT
+  Date: 2026-05-13_10-59-55
+  Model: glm-4.5-air
+======================================================================
+
+======================================================================
+  APPROACH COMPARISON
+======================================================================
+
+  1. NO CITATIONS (baseline): Direct answer, no source tracking
+  2. PROMPT-BASED CITATIONS: Inline [source: "..."] format
+  3. STRUCTURED JSON CITATIONS: Array of {claim, source, confidence}
+
+======================================================================
+  Document: Earth - Wikipedia Summary
+  Question: How did Earth form and what is its atmosphere made of?
+======================================================================
+
+----------------------------------------------------------------------
+  APPROACH 1: NO CITATIONS (baseline)
+----------------------------------------------------------------------
+
+  Based on the document:
+  
+  *   **Formation:** Earth formed approximately 4.54 billion years ago.
+  *   **Atmosphere Composition:** Earth's atmosphere is composed of 78% nitrogen, 21% oxygen, and trace amounts of other gases.
+
+----------------------------------------------------------------------
+  APPROACH 2: PROMPT-BASED CITATIONS
+----------------------------------------------------------------------
+
+  Based on the document provided:
+  
+  **Formation:**
+  Earth formed approximately 4.54 billion years ago. [source: "Earth formed approximately 4.54 billion years ago."]
+  
+  **Atmosphere Composition:**
+  Earth's atmosphere is composed of 78% nitrogen, 21% oxygen, and trace amounts of other gases. [source: "Earth's atmosphere is composed of 78% nitrogen, 21% oxygen, and trace amounts of other gases."]
+
+  Citations found: 2
+    [VERIFIED] "Earth formed approximately 4.54 billion years ago...."
+    [VERIFIED] "Earth's atmosphere is composed of 78% nitrogen, 21% oxygen, and trace amounts of..."
+
+----------------------------------------------------------------------
+  APPROACH 3: STRUCTURED JSON CITATIONS
+----------------------------------------------------------------------
+
+  Claim:      Earth formed approximately 4.54 billion years ago
+  Source:     Earth formed approximately 4.54 billion years ago.
+  Confidence: high
+
+  Claim:      Earth's atmosphere is composed of 78% nitrogen, 21% oxygen, and trace amounts of
+  Source:     Earth's atmosphere is composed of 78% nitrogen, 21% oxygen, and trace amounts of
+  Confidence: high
+
+======================================================================
+  Document: Climate Change Summary Report
+  Question: What are the main causes and effects of climate change according to the report?
+======================================================================
+
+----------------------------------------------------------------------
+  APPROACH 1: NO CITATIONS (baseline)
+----------------------------------------------------------------------
+
+  Based on the document provided, here are the main causes and effects of climate change:
+  
+  ### **Main Causes**
+  
+  *   **Human Activities:** The report states that the warming is "primarily driven by human activities."
+  *   **Greenhouse Gas Emissions:** The specific emissions mentioned are:
+      *   **Fossil Fuel Combustion**
+      *   **Deforestation**
+      *   **Industrial Processes**
+  
+  ### **Main Effects**
+  
+  The document outlines several effects, categorized by their impact on different systems:
+  
+  *   **Temperature:**
+      *   The global average temperature has increased by **about 1.1 degrees Celsius** since the pre-industrial period.
+      *   The **Arctic** is warming at roughly **twice the global average rate**.
+  
+  *   **Atmosphere:**
+      *   **Carbon Dioxide (CO2) concentrations** have risen from approximately 280 ppm in 1750 to over **420 ppm in 2024**.
+  
+  *   **Oceans:**
+      *   **Sea levels** have risen by approximately **20 centimeters since 1900**, and the rate of rise is accelerating.
+      *   **Arctic sea ice extent** has declined by about **13% per decade** since 1979.
+  
+  *   **Weather Events:**
+      *   **Extreme weather events**, including heatwaves, heavy precipitation, and droughts, have become **more frequent and intense** in many regions.
+  
+  *   **Economy:**
+      *   The **economic cost of climate-related disasters** has increased **fivefold over the past 50 years**.
+
+----------------------------------------------------------------------
+  APPROACH 2: PROMPT-BASED CITATIONS
+----------------------------------------------------------------------
+
+  Based on the document, the main causes and effects of climate change are as follows:
+  
+  **Causes**
+  
+  The main causes of climate change are:
+  *   **Human activities, particularly the emission of greenhouse gases.** [source: "This warming is primarily driven by human activities, particularly the emission of greenhouse gases."]
+  *   **Fossil fuel combustion, deforestation, and industrial processes.** [source: "This increase is largely due to fossil fuel combustion, deforestation, and industrial processes."]
+  
+  **Effects**
+  
+  The effects of climate change are:
+  *   **An increase in the global average temperature.** [source: "Global average temperature has increased by about 1.1 degrees Celsius since the pre-industrial period (1850-1900)."]
+  *   **A rise in atmospheric carbon dioxide concentrations.** [source: "Carbon dioxide concentrations in the atmosphere have risen from approximately 280 ppm in 1750 to over 420 ppm in 2024."]
+  *   **A rise in sea levels.** [source: "Sea levels have risen by approximately 20 centimeters since 1900, with the rate of rise accelerating in recent decades."]
+  *   **More rapid warming in the Arctic.** [source: "The Arctic has warmed at roughly twice the global average rate."]
+  *   **A decline in Arctic sea ice extent.** [source: "Arctic sea ice extent has declined by about 13% per decade since satellite observations began in 1979."]
+  *   **An increase in the frequency and intensity of extreme weather events.** [source: "Extreme weather events, including heatwaves, heavy precipitation, and droughts, have become more frequent and intense in many regions."]
+  *   **An increase in the economic cost of climate-related disasters.** [source: "The economic cost of climate-related disasters has increased fivefold over the past 50 years."]
+
+  Citations found: 9
+    [VERIFIED] "This warming is primarily driven by human activities, particularly the emission ..."
+    [VERIFIED] "This increase is largely due to fossil fuel combustion, deforestation, and indus..."
+    [VERIFIED] "Global average temperature has increased by about 1.1 degrees Celsius since the ..."
+    [VERIFIED] "Carbon dioxide concentrations in the atmosphere have risen from approximately 28..."
+    [VERIFIED] "Sea levels have risen by approximately 20 centimeters since 1900, with the rate ..."
+    [VERIFIED] "The Arctic has warmed at roughly twice the global average rate...."
+    [VERIFIED] "Arctic sea ice extent has declined by about 13% per decade since satellite obser..."
+    [VERIFIED] "Extreme weather events, including heatwaves, heavy precipitation, and droughts, ..."
+    [VERIFIED] "The economic cost of climate-related disasters has increased fivefold over the p..."
+
+----------------------------------------------------------------------
+  APPROACH 3: STRUCTURED JSON CITATIONS
+----------------------------------------------------------------------
+
+  Claim:      Global average temperature has increased by about 1.1 degrees Celsius since the 
+  Source:     Global average temperature has increased by about 1.1 degrees Celsius since the 
+  Confidence: high
+
+  Claim:      Human activities, particularly the emission of greenhouse gases, are primarily r
+  Source:     This warming is primarily driven by human activities, particularly the emission 
+  Confidence: high
+
+  Claim:      Carbon dioxide concentrations in the atmosphere have risen from approximately 28
+  Source:     Carbon dioxide concentrations in the atmosphere have risen from approximately 28
+  Confidence: high
+
+  Claim:      The increase in carbon dioxide is largely due to fossil fuel combustion, defores
+  Source:     This increase is largely due to fossil fuel combustion, deforestation, and indus
+  Confidence: high
+
+  Claim:      Sea levels have risen by approximately 20 centimeters since 1900
+  Source:     Sea levels have risen by approximately 20 centimeters since 1900, with the rate 
+  Confidence: high
+
+  Claim:      Projections suggest a further rise of 30-110 cm by 2100 depending on emission sc
+  Source:     Projections suggest a further rise of 30-110 cm by 2100 depending on emission sc
+  Confidence: high
+
+  Claim:      The Arctic has warmed at roughly twice the global average rate
+  Source:     The Arctic has warmed at roughly twice the global average rate.
+  Confidence: high
+
+  Claim:      Arctic sea ice extent has declined by about 13% per decade since satellite obser
+  Source:     Arctic sea ice extent has declined by about 13% per decade since satellite obser
+  Confidence: high
+
+  Claim:      Extreme weather events, including heatwaves, heavy precipitation, and droughts, 
+  Source:     Extreme weather events, including heatwaves, heavy precipitation, and droughts, 
+  Confidence: high
+
+  Claim:      The economic cost of climate-related disasters has increased fivefold over the p
+  Source:     The economic cost of climate-related disasters has increased fivefold over the p
+  Confidence: high
+
+======================================================================
+  KEY TAKEAWAYS
+======================================================================
+
+  1. CITATIONS BUILD TRUST:
+     Without citations, users can't verify where info comes from.
+     With citations, every claim traces back to source material.
+
+  2. TWO WAYS TO GET CITATIONS:
+     a) Prompt-based: ask model to cite inline [source: "..."]
+        Works with ANY model, ANY API. Parse citations with regex.
+     b) Native API (Anthropic only): structured citation objects
+        Returns page numbers, document index, exact spans.
+
+  3. CITATION VALIDATION:
+     Always verify cited text actually exists in the source.
+     Models sometimes hallucinate or paraphrase citations.
+
+  4. DOCUMENT STRUCTURE:
+     Wrap documents in XML tags: <document title="...">...</document>
+     This helps the model distinguish source from instructions.
+
+  5. PDF PROCESSING:
+     Anthropic API: base64 encode PDF, use type="document"
+     ZAI API: extract text from PDF first, send as text content
+     Both benefit from the same citation prompting techniques.
+
+  6. REAL-WORLD USE CASES:
+     - Insurance: satellite imagery fire risk with source tracking
+     - Legal: contract analysis with clause citations
+     - Medical: literature review with paper citations
+     - Education: reading comprehension with text evidence

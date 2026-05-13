@@ -96,6 +96,7 @@ Five agents in `.claude/agents/`:
 
 - No emojis unless requested
 - Concise responses preferred
+- HTML reports: only generate when explicitly asked. Existing HTML files stay as-is. TXT logs are always generated.
 
 ## Exercises
 
@@ -107,8 +108,13 @@ Five agents in `.claude/agents/`:
 - `exercises/structured-output/` — prefilling + stop sequences for clean JSON/code/commands (no commentary)
 - `exercises/tool-use/` — multi-turn tool calling loop: 3 tools (datetime, date math, reminders), agentic chaining pattern, conversation trace logs
 - `exercises/rag/` — full RAG pipeline: chunking (4 strategies), VoyageAI embeddings, VectorIndex (semantic), BM25Index (lexical), hybrid Retriever (RRF fusion), 3-query comparison log showing which strategy wins
-- `exercises/prompt-eval/` — full evaluation pipeline: dataset generation, V1 vs V2 prompts, code grader (syntax) + model grader (quality), combined scoring with formatted report
-- `exercises/prompt-eval-engineering/` — iterative prompt engineering: 4 techniques (be clear, be specific, XML tags, provide examples) measured step-by-step with HTML visual report
+- `exercises/prompt-eval/` — full evaluation pipeline: auto dataset generation, V1 (naive) vs V2 (improved) prompts, code grader (syntax validation) + model grader (quality evaluation), combined scoring, formatted txt report to logs/
+- `exercises/prompt-eval-engineering/` — iterative prompt engineering: 4 techniques (be clear, be specific, XML tags, provide examples) measured step-by-step. PromptEvaluator class generates unique test scenarios, runs evaluation, grades with rigorous rubric. Outputs txt log + HTML visual report with bar chart progression and per-step tables
+- `exercises/thinking-test/` — extended thinking comparison: 3 modes (disabled, budget, enabled) on reasoning tasks, measures accuracy + speed + token usage trade-offs, outputs txt + HTML report
+- `exercises/vision/` — vision API exercise: sends images to glm-5/glm-5-turbo for analysis, compares naive vs structured prompts, multi-image comparison. Requires real images in images/ subfolder. Code ready, no images in repo.
+- `exercises/pdf-citations/` — document citations: 3 approaches (no citations baseline, prompt-based inline [source: "..."] citations, structured JSON citations) with verification. Works with built-in sample documents or real PDFs. Shows citation extraction + validation.
+- `exercises/code-execution/` — client-side code execution via tool calling: 3 tests (direct text analysis, one-shot code generation, agentic loop with execute_python tool). Generates sample streaming churn CSV, model writes/runs analysis code iteratively. Demonstrates the Anthropic Files API + Code Execution pattern adapted for ZAI.
+- `exercises/mcp/` — full MCP (Model Context Protocol) project: MCP server (FastMCP) with tools (read/edit docs), resources (list docs, fetch doc), and prompts (format). MCP client connects via stdio transport. CLI chatbot uses ZAI LLM with OpenAI-compatible tool calling. Supports @mentions (resource injection), /commands (prompts), and autonomous tool use (agentic loop). Adapted from Anthropic SDK to ZAI/OpenAI.
 
 ## API Configuration
 

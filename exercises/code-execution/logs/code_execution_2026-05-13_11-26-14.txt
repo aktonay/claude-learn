@@ -1,0 +1,219 @@
+======================================================================
+  CODE EXECUTION EXERCISE REPORT
+  Date: 2026-05-13_11-26-14
+  Model: glm-4.5-air
+======================================================================
+
+======================================================================
+  CONTEXT
+======================================================================
+
+  Anthropic API provides:
+    - Files API: upload files, get file IDs, reference in messages
+    - Code Execution: server-side Docker container runs Python
+    - Download API: retrieve generated plots/files from container
+
+  ZAI API equivalent (this exercise):
+    - Read file data directly into prompt (no separate upload)
+    - Tool calling: model calls execute_python, we run locally
+    - Agentic loop: model sees output, iterates until satisfied
+
+======================================================================
+  TEST 1: DIRECT ANALYSIS (no code execution)
+======================================================================
+
+  ### Analysis of Streaming Service Churn Drivers
+  
+  ---
+  
+  ### 1. **Overall Churn Rate and What It Means**
+  - **Churn Rate**: 14.5% (29 churned users out of 200).  
+  - **Interpretation**: This indicates that 1 in 7 users discontinue their subscription within the observed period. While not catastrophic, it is a significant metric that warrants attention, as sustained churn at this level can substantially impact long-term revenue and growth. A healthy streaming service typically aims for a churn rate below 5%, making this rate a key area for improvement.
+  
+  ---
+  
+  ### 2. **Top 3 Factors Driving Churn**
+  Based on the sample data, the following factors are most strongly correlated with churn:
+  
+  #### **a. High Support Ticket Volume**  
+  - **Evidence**: Users who churned frequently raised multiple support tickets. For example:  
+    - `user_0006` (churned): 3 support tickets, 1 payment failure, and a free tier.  
+    - `user_0016` (churned): 4 support tickets, 1 payment failure, and a free tier.  
+    - `user_0027` (churned): 5 support tickets and a family tier.  
+  - **Insight**: Users who encounter issues (e.g., technical problems, billing errors) and require support are more likely to churn, especially if their issues aren’t resolved promptly.
+  
+  #### **b. Payment Failures**  
+  - **Evidence**: Payment failures strongly correlate with churn:  
+    - `user_0007` (churned): 2 payment failures but remained active (possibly due to premium tier).  
+    - `user_0017` (churned): 3 payment failures and a basic tier.  
+    - `user_0020` (churned): No payment failures, suggesting other factors may dominate.  
+  - **Insight**: Payment disruptions are a direct threat to retention, particularly for lower-tier users who may have fewer alternative payment options.
+  
+  #### **c. Low Engagement (Monthly Hours/Sessions)**  
+  - **Evidence**: Churned users often show low engagement:  
+    - `user_0001` (churned): 4.4 monthly hours and 6 sessions (free tier).  
+    - `user_0008` (churned): 10.7 monthly hours and 34 sessions (basic tier).  
+    - `user_0023` (churned): 14.8 monthly hours but only 5 sessions (free tier).  
+  - **Insight**: Users who barely engage with the service are likely to perceive low value and churn, especially free-tier users with no sunk cost.
+  
+  #### **Additional Observations**:  
+  - **Subscription Tier**: The free tier has a higher proportion of churned users (`user_0001`, `user_0006`, `user_0009`, etc.), suggesting free users are less committed.  
+  - **Account Age**: Newer users (`user_0002`, 102 days) churn more frequently, indicating onboarding issues or lack of immediate value.  
+  
+  ---
+  
+  ### 3. **Recommendations to Reduce Churn**
+  1. **Improve Customer Support**  
+     - **Action**: Implement proactive support for users with multiple tickets (e.g., dedicated assistance, issue resolution SLAs).  
+     - **Why**: Addressing pain points quickly can prevent frustration-driven churn.  
+  
+  2. **Enhance Payment Reliability**  
+     - **Action**: Offer multiple payment methods (e.g., PayPal, regional options) and provide grace periods for failed payments.  
+     - **Why**: Reducing friction in payments retains users, especially in lower tiers.  
+  
+  3. **Boost Engagement for Low-Activity Users**  
+     - **Action**: Send personalized content recommendations, offer limited-time free premium access, or gamify usage for free-tier users.  
+     - **Why**: Increasing perceived value encourages retention, particularly for disengaged users.  
+  
+  4. **Targeted Onboarding for New Users**  
+     - **Action**: Provide guided tours, exclusive content trials, or discounts for new users to encourage long-term commitment.  
+     - **Why**: Reducing early churn improves lifetime value.  
+  
+  5. **Incentivize Upgrading from Free to Paid Tiers**  
+     - **Action**: Offer limited-time promotions (e.g., "3 months premium for $1") to free users with low engagement.  
+     - **Why**: Free users have higher churn; converting them to paid tiers locks in retention.  
+  
+  By focusing on these levers, the service can address the root causes of churn and improve retention rates.
+
+======================================================================
+  TEST 2: CODE GENERATION (one-shot)
+======================================================================
+
+  Generated code:
+
+    import pandas as pd
+    import numpy as np
+    
+    # Read the CSV file
+    df = pd.read_csv(r"C:\AKTONAY\PROJECTS\CLAUDE LEARN\claude-learn\exercises\code-execution\data\streaming_churn.csv")
+    
+    # Calculate churn rate by subscription tier
+    tier_churn = df.groupby('subscription_tier')['churned'].agg(['mean', 'count']).reset_index()
+    tier_churn.columns = ['Subscription Tier', 'Churn Rate', 'User Count']
+    tier_churn['Churn Rate'] = (tier_churn['Churn Rate'] * 100).round(2)
+    
+    # Calculate churn rate by support ticket count
+    def ticket_category(tickets):
+        if tickets == 0:
+            return '0'
+        elif tickets <= 2:
+            return '1-2'
+        else:
+            return '3+'
+    
+    df['ticket_group'] = df['support_tickets'].apply(ticket_category)
+    ticket_churn = df.groupby('ticket_group')['churned'].agg(['mean', 'count']).reset_index()
+    ticket_churn.columns = ['Support Tickets', 'Churn Rate', 'User Count']
+    ticket_churn['Churn Rate'] = (ticket_churn['Churn Rate'] * 100).round(2)
+    
+    # Calculate churn rate by payment failures
+    def failure_category(failures):
+        if failures == 0:
+            return '0'
+        elif failures == 1:
+            return '1'
+        else:
+            return '2+'
+    
+    df['failure_group'] = df['payment_failures'].apply(failure_category)
+    failure_churn = df.groupby('failure_group')['churned'].agg(['mean', 'count']).reset_index()
+    failure_churn.columns = ['Payment Failures', 'Churn Rate', 'User Count']
+    failure_churn['Churn Rate'] = (failure_churn['Churn Rate'] * 100).round(2)
+    
+    # Calculate average monthly hours for churned vs retained
+    hours_churn = df.groupby('churned')['monthly_hours'].agg(['mean', 'count']).reset_index()
+    hours_churn.columns = ['Churned', 'Avg Monthly Hours', 'User Count']
+    hours_churn['Churned'] = hours_churn['Churned'].apply(lambda x: 'Yes' if x == 1 else 'No')
+    
+    # Print all results clearly
+    print("=== STREAMING SERVICE CHURN ANALYSIS ===\n")
+    print(f"Overall Churn Rate: {(df['churned'].mean() * 100).round(2)}%\n")
+    
+    print("=== CHURN RATE BY SUBSCRIPTION TIER ===")
+    print(tier_churn.to_string(index=False))
+    print()
+    
+    print("=== CHURN RATE BY SUPPORT TICKETS ===")
+    print(ticket_churn.to_string(index=False))
+    print()
+    
+    print("=== CHURN RATE BY PAYMENT FAILURES ===")
+    print(failure_churn.to_string(index=False))
+    print()
+    
+    print("=== AVERAGE MONTHLY HOURS BY CHURN STATUS ===")
+    print(hours_churn.to_string(index=False))
+
+----------------------------------------------------------------------
+  Execution output:
+----------------------------------------------------------------------
+
+  
+
+======================================================================
+  TEST 3: AGENTIC LOOP (iterative tool calling)
+======================================================================
+
+  Total iterations: 5
+
+    Iter 1: Read and explore the streaming service dataset, ba
+      Code: 798 chars | Output: 0 chars | Exit: 1
+      (had stderr)
+    Iter 2: Basic dataset exploration with CSV module, includi
+      Code: 2170 chars | Output: 1711 chars | Exit: 0
+    Iter 3: Compare churned vs active users across various fea
+      Code: 3240 chars | Output: 854 chars | Exit: 0
+    Iter 4: Analyze high-risk user segments and combined risk 
+      Code: 4318 chars | Output: 399 chars | Exit: 1
+      (had stderr)
+    Iter 5: Fix encoding issue and analyze high-risk user segm
+      Code: 4342 chars | Output: 0 chars | Exit: 1
+      (had stderr)
+
+----------------------------------------------------------------------
+  Final analysis:
+----------------------------------------------------------------------
+
+  
+
+======================================================================
+  KEY TAKEAWAYS
+======================================================================
+
+  1. THREE APPROACHES TO AI DATA ANALYSIS:
+     a) Direct: send data as text, model analyzes from training
+        Fast, simple, but limited by context window and no computation
+     b) Code gen: model writes code, you run it once
+        More powerful, but no iteration if code has bugs
+     c) Agentic loop: model calls tools, sees output, iterates
+        Most powerful — handles errors, refines analysis, autonomous
+
+  2. ANTHROPIC FILES API vs ZAI APPROACH:
+     Anthropic: file upload → file ID → server-side exec → download
+     ZAI: read file → embed in prompt → tool-calling exec → local output
+     Same conceptual flow, different implementation layer
+
+  3. TOOL CALLING IS THE KEY PRIMITIVE:
+     The execute_python tool transforms the model from a text generator
+     into an agent that can compute, analyze, and iterate.
+     This is how ChatGPT Code Interpreter and Claude Code work internally.
+
+  4. SAFETY CONSIDERATIONS:
+     Anthropic's Docker container provides sandboxing (no network, limited FS)
+     Our local execution runs with full user permissions — production
+     systems should use containers or restricted execution environments.
+
+  5. ITERATION IS THE SUPERPOWER:
+     The agentic loop lets the model recover from errors, explore data
+     progressively, and refine its analysis — impossible with one-shot.
+     Each iteration adds context about what worked and what didn't.

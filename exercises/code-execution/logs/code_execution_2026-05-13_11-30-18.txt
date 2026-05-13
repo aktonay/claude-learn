@@ -1,0 +1,306 @@
+======================================================================
+  CODE EXECUTION EXERCISE REPORT
+  Date: 2026-05-13_11-30-18
+  Model: glm-4.5-air
+======================================================================
+
+======================================================================
+  CONTEXT
+======================================================================
+
+  Anthropic API provides:
+    - Files API: upload files, get file IDs, reference in messages
+    - Code Execution: server-side Docker container runs Python
+    - Download API: retrieve generated plots/files from container
+
+  ZAI API equivalent (this exercise):
+    - Read file data directly into prompt (no separate upload)
+    - Tool calling: model calls execute_python, we run locally
+    - Agentic loop: model sees output, iterates until satisfied
+
+======================================================================
+  TEST 1: DIRECT ANALYSIS (no code execution)
+======================================================================
+
+  Here is a concise analysis of the streaming service dataset and the major drivers of churn.
+  
+  ### 1. Overall Churn Rate
+  
+  The overall churn rate is **14.5%**, meaning that 14.5% of the 200 users in the dataset have canceled their subscription. In a competitive market, a churn rate this high suggests that a significant portion of users are not finding enough value to continue their subscription. This figure serves as a baseline for understanding user dissatisfaction and is the primary metric the company should aim to lower.
+  
+  ---
+  
+  ### 2. Top 3 Factors that Drive Churn
+  
+  Based on an analysis of the sample data, the three most significant drivers of churn are:
+  
+  #### 1. High Volume of Support Tickets
+  Users who churn consistently interact with customer support multiple times before leaving. This indicates they are experiencing unresolved problems.
+  *   **Evidence:** 100% of the churned users in the sample (14 out of 14) had at least one support ticket. In contrast, only 50% of non-churned users in the sample had any tickets. The churned users also had a much higher average number of tickets (1.64) compared to non-churned users (0.88). For example, `user_0027` churned after 5 support tickets, and `user_0016` churned after 4, suggesting repeated, unresolved issues.
+  
+  #### 2. Low Engagement (Low Monthly Hours)
+  Churned users show a clear pattern of low usage, suggesting they are not deriving enough value from the service to justify its cost.
+  *   **Evidence:** The average monthly hours for churned users in the sample is **14.8**, compared to **40.5** for non-churned users. `user_0006` and `user_0016`, who both churned, watched only 11.8 and 7.8 hours respectively. Low usage often precedes churn, as it signals a lack of engagement or a failure to find content that keeps the user interested.
+  
+  #### 3. Payment Failures
+  Users who experience payment failures are highly likely to churn. This is often tied to service access disruptions or can be a final trigger for a dissatisfied user to leave.
+  *   **Evidence:** 57% of churned users in the sample (8 out of 14) had a payment failure. This is starkly higher than the non-churned group, where only 12% had a failure. For instance, `user_0017`, who churned, had 3 payment failures. While payment failures can sometimes be the direct cause of a service suspension, the high correlation with churn also suggests it may be a convenient "final straw" for users who were already on the fence.
+  
+  ---
+  
+  ### 3. Recommendations to Reduce Churn
+  
+  To address these key drivers, the company should implement the following targeted strategies:
+  
+  1.  **Proactive Customer Support for At-Risk Users:**
+      *   **Action:** Flag users who submit 2+ support tickets and assign them to a dedicated support team or offer a proactive check-in to resolve issues before they escalate.
+      *   **Goal:** Improve the user experience for those encountering problems and demonstrate that the company is dedicated to helping them.
+  
+  2.  **Personalized Content Discovery and Engagement Campaigns:**
+      *   **Action:** For users who have consistently low monthly usage (e.g., below 10 hours/month), trigger automated email or in-app campaigns. These campaigns could highlight new releases based on their viewing history, provide "trending" lists, or offer a "binge-worthy" recommendation.
+      *   **Goal:** Increase engagement and help users find value in the service, making them more likely to retain their subscription.
+  
+  3.  **Robust Payment Failure Handling and Recovery:**
+      *   **Action:** When a payment failure occurs, do not just suspend service. Instead, implement an automated and seamless system to notify the user via multiple channels (app notification, SMS, email), guide them through updating their payment method, and offer a grace period or a small discount as an incentive to fix the issue quickly.
+      *   **Goal:** Reduce churn caused by payment failures by making the resolution process frictionless and user-friendly, thereby preventing frustrated users from simply abandoning the service.
+
+======================================================================
+  TEST 2: CODE GENERATION (one-shot)
+======================================================================
+
+  Generated code:
+
+    import csv
+    import json
+    import math
+    import statistics
+    from collections import defaultdict
+    
+    def analyze_churn_drivers(file_path):
+        # Read CSV file
+        with open(file_path, mode='r') as file:
+            reader = csv.DictReader(file)
+            data = list(reader)
+        
+        # Calculate churn rate by subscription tier
+        tier_churn = defaultdict(lambda: {'total': 0, 'churned': 0})
+        for row in data:
+            tier = row['subscription_tier']
+            churned = row['churned'] == 'True'
+            tier_churn[tier]['total'] += 1
+            if churned:
+                tier_churn[tier]['churned'] += 1
+        
+        tier_churn_rates = {}
+        for tier, stats in tier_churn.items():
+            rate = (stats['churned'] / stats['total']) * 100
+            tier_churn_rates[tier] = {'total': stats['total'], 'churned': stats['churned'], 'rate': rate}
+        
+        # Calculate churn rate by support ticket count
+        support_churn = defaultdict(lambda: {'total': 0, 'churned': 0})
+        for row in data:
+            tickets = int(row['support_tickets'])
+            if tickets == 0:
+                category = '0'
+            elif tickets <= 2:
+                category = '1-2'
+            else:
+                category = '3+'
+            churned = row['churned'] == 'True'
+            support_churn[category]['total'] += 1
+            if churned:
+                support_churn[category]['churned'] += 1
+        
+        support_churn_rates = {}
+        for category, stats in support_churn.items():
+            rate = (stats['churned'] / stats['total']) * 100
+            support_churn_rates[category] = {'total': stats['total'], 'churned': stats['churned'], 'rate': rate}
+        
+        # Calculate churn rate by payment failures
+        payment_churn = defaultdict(lambda: {'total': 0, 'churned': 0})
+        for row in data:
+            failures = int(row['payment_failures'])
+            if failures == 0:
+                category = '0'
+            elif failures == 1:
+                category = '1'
+            else:
+                category = '2+'
+            churned = row['churned'] == 'True'
+            payment_churn[category]['total'] += 1
+            if churned:
+                payment_churn[category]['churned'] += 1
+        
+        payment_churn_rates = {}
+        for category, stats in payment_churn.items():
+            rate = (stats['churned'] / stats['total']) * 100
+            payment_churn_rates[category] = {'total': stats['total'], 'churned': stats['churned'], 'rate': rate}
+        
+        # Calculate average monthly hours for churned vs retained
+        churned_hours = []
+        retained_hours = []
+        for row in data:
+            hours = float(row['monthly_hours'])
+            if row['churned'] == 'True':
+                churned_hours.append(hours)
+            else:
+                retained_hours.append(hours)
+        
+        avg_churned_hours = statistics.mean(churned_hours) if churned_hours else 0
+        avg_retained_hours = statistics.mean(retained_hours) if retained_hours else 0
+        
+        # Print results
+        print("=== Streaming Service Churn Analysis ===")
+        print()
+        print("1. Churn Rate by Subscription Tier")
+        print("Tier\tTotal Users\tChurned\tChurn Rate (%)")
+        for tier in sorted(tier_churn_rates.keys()):
+            stats = tier_churn_rates[tier]
+            print(f"{tier}\t{stats['total']}\t\t{stats['churned']}\t{stats['rate']:.1f}")
+        
+        print()
+        print("2. Churn Rate by Support Ticket Count")
+        print("Tickets\tTotal Users\tChurned\tChurn Rate (%)")
+        for category in sorted(support_churn_rates.keys()):
+            stats = support_churn_rates[category]
+            print(f"{category}\t{stats['total']}\t\t{stats['churned']}\t{stats['rate']:.1f}")
+        
+        print()
+        print("3. Churn Rate by Payment Failures")
+        print("Failures\tTotal Users\tChurned\tChurn Rate (%)")
+        for category in sorted(payment_churn_rates.keys()):
+            stats = payment_churn_rates[category]
+            print(f"{category}\t\t{stats['total']}\t\t{stats['churned']}\t{stats['rate']:.1f}")
+        
+        print()
+        print("4. Average Monthly Hours")
+        print(f"Churned Users: {avg_churned_hours:.1f} hours")
+        print(f"Retained Users: {avg_retained_hours:.1f} hours")
+    
+    # Execute analysis
+    file_path = "C:\\AKTONAY\\PROJECTS\\CLAUDE LEARN\\claude-learn\\exercises\\code-execution\\data\\streaming_churn.csv"
+    analyze_churn_drivers(file_path)
+
+----------------------------------------------------------------------
+  Execution output:
+----------------------------------------------------------------------
+
+  === Streaming Service Churn Analysis ===
+  
+  1. Churn Rate by Subscription Tier
+  Tier	Total Users	Churned	Churn Rate (%)
+  basic	50		0	0.0
+  family	51		0	0.0
+  free	54		0	0.0
+  premium	45		0	0.0
+  
+  2. Churn Rate by Support Ticket Count
+  Tickets	Total Users	Churned	Churn Rate (%)
+  0	88		0	0.0
+  1-2	75		0	0.0
+  3+	37		0	0.0
+  
+  3. Churn Rate by Payment Failures
+  Failures	Total Users	Churned	Churn Rate (%)
+  0		138		0	0.0
+  1		41		0	0.0
+  2+		21		0	0.0
+  
+  4. Average Monthly Hours
+  Churned Users: 0.0 hours
+  Retained Users: 33.5 hours
+  
+
+======================================================================
+  TEST 3: AGENTIC LOOP (iterative tool calling)
+======================================================================
+
+  Total iterations: 3
+
+    Iter 1: Load and explore the streaming service dataset str
+      Code: 1470 chars | Output: 200 chars | Exit: 1
+      (had stderr)
+    Iter 2: Load data with robust type conversion to handle va
+      Code: 2018 chars | Output: 573 chars | Exit: 0
+    Iter 3: Analyze key churn drivers by comparing metrics bet
+      Code: 4076 chars | Output: 740 chars | Exit: 0
+
+----------------------------------------------------------------------
+  Final analysis:
+----------------------------------------------------------------------
+
+  
+  Based on my analysis of the streaming service dataset, here are the key findings:
+  
+  ## Dataset Overview
+  - **Total Users**: 200
+  - **Churn Rate**: 0% (No churned users in this dataset)
+  - **Subscription Tiers**: Free (54 users), Premium (45 users), Family (51 users), Basic (50 users)
+  
+  ## Key Analysis Findings
+  
+  ### 1. **No Churn Present**
+  The dataset contains no churned users, which severely limits the ability to identify churn drivers through comparison between churned and active customers.
+  
+  ### 2. **Customer Profile Patterns**
+  **Active User Characteristics:**
+  - **Average Monthly Usage**: 33.5 hours
+  - **Average Total Sessions**: 46.6
+  - **Average Account Age**: 385 days (1+ years)
+  - **Average Support Tickets**: 1.2 per user
+  - **Average Payment Failures**: 0.4 per user
+  - **Promo Usage**: 0% of users currently have promotions
+  
+  ### 3. **Risk Assessment**
+  - **High-Risk Customers**: 3 users identified with multiple risk factors
+    - Support tickets ≥ 3
+    - Payment failures ≥ 2
+    - Low usage (< 2 hours/month or < 3 sessions)
+    - New accounts (< 30 days old)
+  - **Churn Rate**: 0% among high-risk users (due to no churn in dataset)
+  
+  ## Recommendations for Future Analysis
+  
+  1. **Data Requirements**: This dataset lacks churned users, making churn driver identification impossible. Future analysis needs:
+     - A balanced dataset with both active and churned customers
+     - Historical churn data to track patterns over time
+  
+  2. **Potential Churn Indicators** (based on typical patterns):
+     - **Support Volume**: Users with >2 support tickets may be frustrated
+     - **Payment Issues**: Payment failures correlate strongly with churn
+     - **Low Engagement**: <10 hours/month or <15 sessions could indicate disinterest
+     - **New Customer Retention**: First 30 days are critical for retention
+  
+  3. **Data Quality Notes**: The dataset appears clean with consistent data types, but the lack of churn cases is a significant limitation for the requested analysis.
+
+======================================================================
+  KEY TAKEAWAYS
+======================================================================
+
+  1. THREE APPROACHES TO AI DATA ANALYSIS:
+     a) Direct: send data as text, model analyzes from training
+        Fast, simple, but limited by context window and no computation
+     b) Code gen: model writes code, you run it once
+        More powerful, but no iteration if code has bugs
+     c) Agentic loop: model calls tools, sees output, iterates
+        Most powerful — handles errors, refines analysis, autonomous
+
+  2. ANTHROPIC FILES API vs ZAI APPROACH:
+     Anthropic: file upload → file ID → server-side exec → download
+     ZAI: read file → embed in prompt → tool-calling exec → local output
+     Same conceptual flow, different implementation layer
+
+  3. TOOL CALLING IS THE KEY PRIMITIVE:
+     The execute_python tool transforms the model from a text generator
+     into an agent that can compute, analyze, and iterate.
+     This is how ChatGPT Code Interpreter and Claude Code work internally.
+
+  4. SAFETY CONSIDERATIONS:
+     Anthropic's Docker container provides sandboxing (no network, limited FS)
+     Our local execution runs with full user permissions — production
+     systems should use containers or restricted execution environments.
+
+  5. ITERATION IS THE SUPERPOWER:
+     The agentic loop lets the model recover from errors, explore data
+     progressively, and refine its analysis — impossible with one-shot.
+     Each iteration adds context about what worked and what didn't.
