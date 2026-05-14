@@ -44,3 +44,6 @@ node_modules/
 # .claude/agents/   — team subagents, committed to git
 # CLAUDE.md         — always-on project context, committed to git
 # ============================================================
+temp_auto_push.bat
+temp_interactive_push.bat
+branch_structure.json
