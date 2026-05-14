@@ -9,15 +9,7 @@ AI-powered React component generator with live preview.
 
 ## Setup
 
-1. **Optional** Edit `.env` and replace `your-api-key-here` with your Anthropic API key from [console.anthropic.com](https://console.anthropic.com/settings/keys):
-
-```
-ANTHROPIC_API_KEY=sk-ant-...
-```
-
-The project runs without an API key — it falls back to a mock provider that returns canned components instead of calling Claude. If you leave the placeholder unchanged, you'll get the mock.
-
-2. Install dependencies and initialize the database:
+1. Install dependencies and initialize the database:
 
 ```bash
 npm run setup
@@ -29,11 +21,18 @@ This command will:
 
 - Install all dependencies
 - Generate Prisma client
-- Run database migrations
+- Run database migrations (SQLite)
+
+2. Configure the `.env` file with your ZAI API credentials:
+
+```
+ZAI_API_KEY=your-zai-api-key
+ZAI_BASE_URL=https://api.z.ai/api/coding/paas/v4/
+```
+
+The project falls back to a mock provider (canned components) if no API key is set.
 
 ## Running the Application
-
-### Development
 
 ```bash
 npm run dev
@@ -51,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ## Features
 
-- AI-powered component generation using Claude
+- AI-powered component generation
 - Live preview with hot reload
 - Virtual file system (no files written to disk)
 - Syntax highlighting and code editor
@@ -65,5 +64,13 @@ Open [http://localhost:3000](http://localhost:3000)
 - TypeScript
 - Tailwind CSS v4
 - Prisma with SQLite
-- Anthropic Claude AI
+- ZAI API (glm-5-turbo) via OpenAI-compatible provider
 - Vercel AI SDK
+
+## Changes from Original
+
+The original project used the Anthropic Claude API (`@ai-sdk/anthropic`). It has been adapted to use the ZAI API with `glm-5-turbo` (fast model) via `@ai-sdk/openai-compatible`. Key changes:
+
+- `src/lib/provider.ts` — replaced Anthropic provider with ZAI OpenAI-compatible provider, reads `ZAI_API_KEY` and `ZAI_BASE_URL` from `.env`
+- `src/app/api/chat/route.ts` — removed Anthropic-specific `providerOptions` cache control, updated mock provider check to use `ZAI_API_KEY`
+- `.env` — uses `ZAI_API_KEY` and `ZAI_BASE_URL` instead of `ANTHROPIC_API_KEY`
