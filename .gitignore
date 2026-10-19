@@ -3,8 +3,6 @@
 # These files contain API keys, passwords, and tokens.
 # Exposing them is a security incident.
 # ============================================================
-.env
-.env.*
 *.key
 *.pem
 credentials.json
@@ -28,7 +26,6 @@ Desktop.ini
 # ============================================================
 # EDITOR FILES — personal preferences, not project config
 # ============================================================
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -47,3 +44,4 @@ node_modules/
 temp_auto_push.bat
 temp_interactive_push.bat
 branch_structure.json
+config.bat
